@@ -1,11 +1,17 @@
 import { waitFor } from '@testing-library/react';
 import type { DataController, InProgressState } from '@player-ui/player';
 import { Player } from '@player-ui/player';
+import { setImmediate } from 'timers';
 import type { TransformFunction } from '@player-ui/player';
 import { makeFlow } from '@player-ui/make-flow';
 import { AssetTransformPlugin } from '@player-ui/asset-transform-plugin';
 import type { Asset, AssetWrapper } from '@player-ui/types';
 import { CheckPathPlugin } from '.';
+
+async function runAllPromises() {
+  await new Promise(setImmediate);
+  jest.runAllTimers();
+}
 
 const nestedAssetFlow = makeFlow({
   id: 'view-1',
@@ -55,6 +61,7 @@ const applicableFlow = makeFlow({
   fields: {
     asset: {
       id: 'fields',
+      type: 'any',
       values: [
         {
           asset: {
@@ -79,12 +86,12 @@ const applicableFlow = makeFlow({
           asset: {
             id: 'asset-4',
             applicability: '{{foo.baz}}',
-            type: 'asset',
+            type: 'foo',
             values: [
               {
                 asset: {
                   id: 'asset-4a',
-                  type: 'asset',
+                  type: 'bar',
                 },
               },
             ],
@@ -298,6 +305,39 @@ describe('works with applicability', () => {
     });
     player.start(applicableFlow);
     dataController = (player.getState() as InProgressState).controllers.data;
+  });
+  test('hasParentContext', async () => {
+    dataController.set([['foo.baz', true]]);
+    await runAllPromises();
+
+    expect(
+      checkPathPlugin.hasParentContext('asset-4a', {
+        type: 'any',
+      })
+    ).toBe(true);
+
+    expect(
+      checkPathPlugin.hasParentContext('asset-4a', {
+        type: 'foo',
+      })
+    ).toBe(true);
+  });
+
+  test('hasChildContext', async () => {
+    dataController.set([['foo.baz', true]]);
+    await runAllPromises();
+
+    expect(
+      checkPathPlugin.hasChildContext('fields', {
+        type: 'foo',
+      })
+    ).toBe(true);
+
+    expect(
+      checkPathPlugin.hasChildContext('fields', {
+        type: 'bar',
+      })
+    ).toBe(true);
   });
 
   test('path', async () => {

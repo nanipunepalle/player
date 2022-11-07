@@ -355,10 +355,20 @@ export class Player {
           // The nested transition call would trigger another round of the flow transition hooks to be called.
           // This created a weird timing where this nested transition would happen before the view had a chance to respond to the first one
           // Use a queueMicrotask to make sure the expression transition is outside the scope of the flow hook
+
+          // Additionally, because we are using queueMicrotask, errors could get swallowed in the detached queue
+          // Use a try catch and fail player explicitly if any errors are caught in the nested transition/state
           queueMicrotask(() => {
-            flowController?.transition(
-              String(expressionEvaluator?.evaluate(exp))
-            );
+            try {
+              flowController?.transition(
+                String(expressionEvaluator?.evaluate(exp))
+              );
+            } catch (error) {
+              const state = this.getState();
+              if (error instanceof Error && state.status === 'in-progress') {
+                state.fail(error);
+              }
+            }
           });
         }
 

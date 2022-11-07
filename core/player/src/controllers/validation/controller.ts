@@ -452,7 +452,7 @@ export class ValidationController implements BindingTracker {
             const response = this.validationRunner(
               validationObj,
               context,
-              binding
+              vBinding
             );
             return response ? { message: response.message } : undefined;
           });

@@ -2,6 +2,7 @@ import { omit } from 'timm';
 import { makeFlow } from '@player-ui/make-flow';
 import { waitFor } from '@testing-library/react';
 import type { Flow } from '@player-ui/types';
+import { setImmediate } from 'timers';
 import type { SchemaController } from '../schema';
 import type { BindingParser } from '../binding';
 import TrackBindingPlugin, { addValidator } from './helpers/binding.plugin';
@@ -9,6 +10,11 @@ import { Player } from '..';
 import type { ValidationController } from '../controllers/validation';
 import type { InProgressState } from '../types';
 import TestExpressionPlugin from './helpers/expression.plugin';
+
+async function runAllPromises() {
+  await new Promise(setImmediate);
+  jest.runAllTimers();
+}
 
 const simpleFlow: Flow = {
   id: 'test-flow',
@@ -1908,5 +1914,137 @@ describe('Validations with multiple inputs', () => {
         b: 85,
       },
     });
+  });
+});
+
+describe('weak binding edge cases', () => {
+  test('requiredIf', async () => {
+    const flow = makeFlow({
+      id: 'view-1',
+      type: 'view',
+      thing1: {
+        asset: {
+          id: 'thing-1',
+          binding: 'input.text',
+        },
+      },
+      thing2: {
+        asset: {
+          id: 'thing-2',
+          binding: 'input.check',
+        },
+      },
+      validation: [
+        {
+          type: 'requiredIf',
+          ref: 'input.text',
+          param: 'input.check',
+        },
+      ],
+    });
+
+    flow.schema = {
+      ROOT: {
+        input: {
+          type: 'InputType',
+        },
+      },
+      InputType: {
+        text: {
+          type: 'DateType',
+        },
+        check: {
+          type: 'BooleanType',
+          validation: [
+            {
+              type: 'required',
+            },
+          ],
+        },
+      },
+    };
+
+    const basicValidationPlugin = {
+      name: 'basic-validation',
+      apply: (player: Player) => {
+        player.hooks.schema.tap('basic-validation', (schema) => {
+          schema.addDataTypes([
+            {
+              type: 'DateType',
+              validation: [{ type: 'date' }],
+            },
+            {
+              type: 'BooleanType',
+              validation: [{ type: 'boolean' }],
+            },
+          ]);
+        });
+
+        player.hooks.validationController.tap('basic-validation', (vc) => {
+          vc.hooks.createValidatorRegistry.tap(
+            'basic-validation',
+            (registry) => {
+              registry.register('date', (ctx, value) => {
+                if (value === undefined) {
+                  return;
+                }
+
+                return value.match(/^\d{4}-\d{2}-\d{2}$/)
+                  ? undefined
+                  : { message: 'Not a date' };
+              });
+              registry.register('boolean', (ctx, value) => {
+                if (value === undefined || value === true || value === false) {
+                  return;
+                }
+
+                return {
+                  message: 'Not a boolean',
+                };
+              });
+
+              registry.register('required', (ctx, value) => {
+                if (value === undefined) {
+                  return {
+                    message: 'Required',
+                  };
+                }
+              });
+
+              registry.register<any>('requiredIf', (ctx, value, { param }) => {
+                const paramValue = ctx.model.get(param);
+                if (paramValue === undefined) {
+                  return;
+                }
+
+                if (value === undefined) {
+                  return {
+                    message: 'Required',
+                  };
+                }
+              });
+            }
+          );
+        });
+      },
+    };
+
+    const player = new Player({
+      plugins: [new TrackBindingPlugin(), basicValidationPlugin],
+    });
+    player.start(flow);
+    const state = player.getState() as InProgressState;
+
+    state.controllers.flow.transition('next');
+    await runAllPromises();
+    state.controllers.data.set([['input.text', '1999-12-31']]);
+    await runAllPromises();
+
+    state.controllers.data.set([['input.check', true]]);
+    await runAllPromises();
+    state.controllers.flow.transition('next');
+    await runAllPromises();
+
+    expect(player.getState().status).toBe('completed');
   });
 });
