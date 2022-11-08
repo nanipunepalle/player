@@ -120,7 +120,7 @@ interface TransformedView extends ViewAsset {
  *
  */
 const ViewTransform: TransformFunction<ViewAsset, TransformedView> = (
-  view
+  view: any
 ) => ({
   ...view,
   run() {

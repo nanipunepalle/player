@@ -4,7 +4,7 @@ const DuplicatePackageCheckerPlugin = require('duplicate-package-checker-webpack
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 
 module.exports = (env, argv) => ({
-  entry: '.',
+  entry: [path.resolve(__dirname, 'polyfills/index.ts'), '.'],
   mode: argv.mode,
   devtool: 'none',
   output: {
@@ -14,6 +14,7 @@ module.exports = (env, argv) => ({
     library: process.env.LIBRARY_NAME,
     // libraryExport: process.env.LIBRARY_NAME,
     libraryTarget: 'umd',
+    
   },
 
   optimization: {

@@ -9,7 +9,9 @@ import TrackBindingPlugin, { addValidator } from './helpers/binding.plugin';
 import { Player } from '..';
 import type { ValidationController } from '../controllers/validation';
 import type { InProgressState } from '../types';
-import TestExpressionPlugin from './helpers/expression.plugin';
+import TestExpressionPlugin, {
+  RequiredIfValidationProviderPlugin,
+} from './helpers/expression.plugin';
 
 async function runAllPromises() {
   await new Promise(setImmediate);
@@ -314,6 +316,64 @@ const flowWithThings: Flow = {
       },
     },
   },
+  navigation: {
+    BEGIN: 'FLOW_1',
+    FLOW_1: {
+      startState: 'VIEW_1',
+      VIEW_1: {
+        state_type: 'VIEW',
+        ref: 'view-1',
+        transitions: {
+          '*': 'END_1',
+        },
+      },
+      END_1: {
+        state_type: 'END',
+        outcome: 'test',
+      },
+    },
+  },
+};
+
+const flowWithApplicability: Flow = {
+  id: 'test-flow',
+  views: [
+    {
+      id: 'view-1',
+      type: 'view',
+      thing1: {
+        asset: {
+          type: 'whatevs',
+          id: 'thing1',
+          binding: 'dependentBinding',
+        },
+      },
+      thing2: {
+        asset: {
+          type: 'whatevs',
+          id: 'thing2',
+          binding: 'independentBinding',
+        },
+      },
+      thing3: {
+        asset: {
+          type: 'whatevs',
+          id: 'thing3',
+          applicability: '{{independentBinding}} == true',
+        },
+      },
+      validation: [
+        {
+          type: 'requiredIf',
+          ref: 'dependentBinding',
+          trigger: 'load',
+          param: '{{independentBinding}}',
+          message: 'required based on independent value',
+        },
+      ],
+    },
+  ],
+  data: {},
   navigation: {
     BEGIN: 'FLOW_1',
     FLOW_1: {
@@ -1267,6 +1327,106 @@ describe('warnings', () => {
       'VIEW'
     );
   });
+  it('warnings do not stop data saving', () => {
+    const flow = makeFlow({
+      asset: {
+        id: 'input-2',
+        type: 'input',
+        binding: 'person.name',
+        label: {
+          asset: {
+            id: 'input-2-label',
+            type: 'text',
+            value: 'Name',
+          },
+        },
+      },
+    });
+
+    flow.schema = {
+      ROOT: {
+        person: {
+          type: 'PersonType',
+        },
+      },
+      PersonType: {
+        name: {
+          type: 'StringType',
+          validation: [
+            {
+              type: 'names',
+              names: ['frodo', 'sam'],
+              severity: 'warning',
+            },
+          ],
+        },
+      },
+    };
+
+    const player = new Player({
+      plugins: [new TrackBindingPlugin()],
+    });
+    player.start(flow);
+    const state = player.getState() as InProgressState;
+
+    state.controllers.data.set([['person.name', 'peter']], {
+      formatted: true,
+    });
+
+    expect(
+      state.controllers.data.get('person.name', { includeInvalid: false })
+    ).toBe('peter');
+  });
+
+  it('errors still do stop data saving', () => {
+    const flow = makeFlow({
+      asset: {
+        id: 'input-2',
+        type: 'input',
+        binding: 'person.name',
+        label: {
+          asset: {
+            id: 'input-2-label',
+            type: 'text',
+            value: 'Name',
+          },
+        },
+      },
+    });
+
+    flow.schema = {
+      ROOT: {
+        person: {
+          type: 'PersonType',
+        },
+      },
+      PersonType: {
+        name: {
+          type: 'StringType',
+          validation: [
+            {
+              type: 'names',
+              names: ['frodo', 'sam'],
+            },
+          ],
+        },
+      },
+    };
+
+    const player = new Player({
+      plugins: [new TrackBindingPlugin()],
+    });
+    player.start(flow);
+    const state = player.getState() as InProgressState;
+
+    state.controllers.data.set([['person.name', 'peter']], {
+      formatted: true,
+    });
+
+    expect(
+      state.controllers.data.get('person.name', { includeInvalid: false })
+    ).toBe(undefined);
+  });
 
   it('once blocking warnings auto-dismiss on double-navigation', async () => {
     const player = new Player({ plugins: [new TrackBindingPlugin()] });
@@ -1670,6 +1830,71 @@ test('validates on expressions outside of view', async () => {
   const response = await outcome;
   expect(response.data).toStrictEqual({ person: { name: 'frodo' } });
 });
+
+describe('Validation applicability', () => {
+  let player: Player;
+
+  beforeEach(() => {
+    player = new Player({
+      plugins: [
+        new TrackBindingPlugin(),
+        new RequiredIfValidationProviderPlugin(),
+      ],
+    });
+
+    player.start(flowWithApplicability);
+  });
+
+  describe('weak validation', () => {
+    it('weak binding updates should be allowed despite strong validation errors', async () => {
+      const state = player.getState() as InProgressState;
+
+      state.controllers.data.set([['independentBinding', true]]);
+      await runAllPromises();
+      expect(state.controllers.data.get('independentBinding')).toStrictEqual(
+        true
+      );
+      expect(
+        state.controllers.view.currentView?.lastUpdate?.thing1.asset.validation
+      ).toMatchObject({
+        severity: 'error',
+        message: `required based on independent value`,
+      });
+
+      state.controllers.data.set([['dependentBinding', 'foo']]);
+      await runAllPromises();
+      expect(state.controllers.data.get('dependentBinding')).toStrictEqual(
+        'foo'
+      );
+      expect(
+        state.controllers.view.currentView?.lastUpdate?.thing1.asset.validation
+      ).toBeUndefined();
+
+      state.controllers.data.set([['dependentBinding', undefined]]);
+      await runAllPromises();
+      expect(
+        state.controllers.view.currentView?.lastUpdate?.thing1.asset.validation
+      ).toMatchObject({
+        severity: 'error',
+        message: `required based on independent value`,
+      });
+
+      state.controllers.data.set([['independentBinding', false]]);
+      await runAllPromises();
+
+      expect(state.controllers.data.get('independentBinding')).toStrictEqual(
+        false
+      );
+      expect(
+        state.controllers.view.currentView?.lastUpdate?.thing1.asset.validation
+      ).toMatchObject({
+        severity: 'error',
+        message: `required based on independent value`,
+      });
+    });
+  });
+});
+
 describe('Validations with custom field messages', () => {
   it('can evaluate expressions in message', async () => {
     const flow = makeFlow({
@@ -1826,19 +2051,7 @@ describe('Validations with multiple inputs', () => {
         message: 'Both need to equal 100',
       })
     );
-
-    expect(
-      state.controllers.data.get('', { includeInvalid: false })
-    ).toMatchObject({
-      foo: {
-        a: 90,
-        b: 10,
-      },
-    });
-
-    expect(
-      state.controllers.data.get('', { includeInvalid: true })
-    ).toMatchObject({
+    expect(state.controllers.data.get('')).toMatchObject({
       foo: {
         a: 90,
         b: 70,

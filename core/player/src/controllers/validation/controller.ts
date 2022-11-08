@@ -12,6 +12,7 @@ import type {
   ValidationProvider,
   ValidationResponse,
   WarningValidationResponse,
+  StrongOrWeakBinding
 } from '../../validator';
 import { ValidationMiddleware, ValidatorRegistry } from '../../validator';
 import type { Logger } from '../../logger';
@@ -109,6 +110,7 @@ class ValidatedBinding {
   };
 
   public weakBindings: Set<BindingInstance>;
+
   private onDismiss?: () => void;
 
   constructor(
@@ -129,6 +131,7 @@ class ValidatedBinding {
         log?.warn(`Unknown validation trigger: ${trigger}`);
       }
     });
+
     this.weakBindings = weakBindings ?? new Set();
   }
 
@@ -226,7 +229,7 @@ class ValidatedBinding {
     }
 
     if (this.currentPhase === 'navigation' || phase === this.currentPhase) {
-      // Already added all the types. No need to continue adding new validations
+      // Already added all the types. No need to continue adding new things
       this.runApplicableValidations(runner, canDismiss);
       return;
     }
@@ -279,18 +282,19 @@ class ValidatedBinding {
  */
 export class ValidationController implements BindingTracker {
   public readonly hooks = {
-    /** A hook called to tap into the validator registry for adding more validators */
-    createValidatorRegistry: new SyncHook<[ValidatorRegistry]>(),
+    /** A hook called to tap into the validator registry for adding more things */
+    createValidatorRegistry: new SyncHook<ValidatorRegistry>(['registry']),
 
     /** A callback/event when a new validation is added to the view */
-    onAddValidation: new SyncWaterfallHook<
-      [ValidationResponse, BindingInstance]
-    >(),
+    onAddValidation: new SyncWaterfallHook<ValidationResponse, BindingInstance>(
+      ['validation', 'binding']
+    ),
 
     /** The inverse of onAddValidation, this is called when a validation is removed from the list */
     onRemoveValidation: new SyncWaterfallHook<
-      [ValidationResponse, BindingInstance]
-    >(),
+      ValidationResponse,
+      BindingInstance
+    >(['validation', 'binding']),
   };
 
   private tracker: BindingTracker | undefined;
@@ -299,8 +303,8 @@ export class ValidationController implements BindingTracker {
   private schema: SchemaController;
   private providers: Array<ValidationProvider>;
   private options?: SimpleValidatorContext;
-  private weakBindingTracker = new Set<BindingInstance>();
   private lastActiveBindings = new Set<BindingInstance>();
+  private weakBindingTracker = new Set<BindingInstance>();
 
   constructor(schema: SchemaController, options?: SimpleValidatorContext) {
     this.schema = schema;
@@ -322,28 +326,36 @@ export class ValidationController implements BindingTracker {
           }
 
           this.updateValidationsForBinding(binding, 'change', this.options);
-
           const strongValidation = this.getValidationForBinding(binding);
 
           // return validation issues directly on bindings first
-          if (strongValidation?.get()) return strongValidation.get();
+          if (strongValidation?.get()?.severity === 'error') {
+            return strongValidation.get();
+          }
 
           // if none, check to see any validations this binding may be a weak ref of and return
-          const newInvalidBindings: Set<BindingInstance> = new Set();
-          for (const [, weakValidation] of Array.from(this.validations)) {
+          const newInvalidBindings: Set<StrongOrWeakBinding> = new Set();
+          this.validations.forEach((weakValidation, strongBinding) => {
             if (
               caresAboutDataChanges(
                 new Set([binding]),
                 weakValidation.weakBindings
               ) &&
-              weakValidation?.get()
+              weakValidation?.get()?.severity === 'error'
             ) {
-              weakValidation?.weakBindings.forEach(
-                newInvalidBindings.add,
-                newInvalidBindings
-              );
+              weakValidation?.weakBindings.forEach((weakBinding) => {
+                weakBinding === strongBinding
+                  ? newInvalidBindings.add({
+                      binding: weakBinding,
+                      isStrong: true,
+                    })
+                  : newInvalidBindings.add({
+                      binding: weakBinding,
+                      isStrong: false,
+                    });
+              });
             }
-          }
+          });
 
           if (newInvalidBindings.size > 0) {
             return newInvalidBindings;
@@ -356,7 +368,6 @@ export class ValidationController implements BindingTracker {
 
   public onView(view: ViewInstance): void {
     this.validations.clear();
-
     if (!this.options) {
       return;
     }
@@ -467,6 +478,7 @@ export class ValidationController implements BindingTracker {
     binding: BindingInstance
   ) {
     const handler = this.getValidator(validationObj.type);
+
     const weakBindings = new Set<BindingInstance>();
 
     // For any data-gets in the validation runner, default to using the _invalid_ value (since that's what we're testing against)
@@ -506,7 +518,6 @@ export class ValidationController implements BindingTracker {
           model,
           evaluate: context.evaluate,
         });
-
         if (parameters) {
           message = replaceParams(message, parameters);
         }
@@ -584,7 +595,6 @@ export class ValidationController implements BindingTracker {
 
     for (const b of this.getBindings()) {
       const invalid = this.getValidationForBinding(b)?.get();
-
       if (invalid) {
         this.options?.logger.debug(
           `Validation on binding: ${b.asString()} is preventing navigation. ${JSON.stringify(
@@ -617,7 +627,6 @@ export class ValidationController implements BindingTracker {
       },
       getAll: () => {
         const bindings = this.getBindings();
-
         if (bindings.size === 0) {
           return undefined;
         }
@@ -629,7 +638,6 @@ export class ValidationController implements BindingTracker {
 
         bindings.forEach((b) => {
           const validation = this.getValidationForBinding(b)?.get();
-
           if (validation) {
             validationMapping.set(b, validation);
           }

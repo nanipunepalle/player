@@ -27,6 +27,9 @@ export interface InputHookConfig {
 
   /** Affix to prepend to value - does not save to model and is only for display on input */
   suffix?: string;
+
+  /** Trim leading/trailing whitespace in values */
+  trim?: boolean;
 }
 
 const defaultKeyStrings = [
@@ -55,6 +58,7 @@ export const getConfig = (
     decimalSymbol: '.',
     prefix: '',
     suffix: '',
+    trim: false,
     ...userConfig,
   };
 };
@@ -105,6 +109,7 @@ export const useInputAsset = (
     decimalSymbol,
     prefix,
     suffix,
+    trim,
   } = getConfig(config);
 
   /** Reset and pending format timers */
@@ -166,6 +171,20 @@ export const useInputAsset = (
     return `${prefix}${value}${suffix}`;
   }
 
+  /** Helper to format and trim values */
+  const formatAndTrim = (e: React.FocusEvent<HTMLInputElement>) => {
+    const formatted =
+      (prefix
+        ? props.format(e.target.value.replace(prefix, ''))
+        : props.format(e.target.value)) ?? '';
+
+    if (trim) {
+      return formatted.trim();
+    }
+
+    return formatted;
+  };
+
   /** Value handling logic on key down */
   const onKeyDownHandler: KeyDownHandler = (currentValue: string) => {
     const symbolPosition = currentValue.indexOf(decimalSymbol);
@@ -198,10 +217,7 @@ export const useInputAsset = (
   const onBlur: React.FocusEventHandler<HTMLInputElement> = (e) => {
     clearPending();
 
-    const formatted =
-      (prefix
-        ? e.target.value.replace(prefix, '')
-        : props.format(e.target.value)) ?? '';
+    const formatted = formatAndTrim(e);
 
     if (formatted) {
       props.set(formatted);
