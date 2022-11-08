@@ -3,9 +3,9 @@ import type {
   Binding,
   Expression,
   ExpressionHandler,
+  FormatType,
   ValidatorFunction,
 } from '../..';
-import { FormatType } from '../..';
 
 /**
  * Adds a validation provider to the validator registry
@@ -38,6 +38,7 @@ export default class TestExpressionPlugin implements PlayerPlugin {
     });
   }
 }
+
 /** A test validator function that makes sure the value is present */
 export const required: ValidatorFunction<{
   /** An optional expression to limit the required check only if true */

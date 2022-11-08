@@ -12,7 +12,7 @@ import type {
   ValidationProvider,
   ValidationResponse,
   WarningValidationResponse,
-  StrongOrWeakBinding
+  StrongOrWeakBinding,
 } from '../../validator';
 import { ValidationMiddleware, ValidatorRegistry } from '../../validator';
 import type { Logger } from '../../logger';
@@ -335,7 +335,9 @@ export class ValidationController implements BindingTracker {
 
           // if none, check to see any validations this binding may be a weak ref of and return
           const newInvalidBindings: Set<StrongOrWeakBinding> = new Set();
-          this.validations.forEach((weakValidation, strongBinding) => {
+          for (const [strongBinding, weakValidation] of Array.from(
+            this.validations
+          )) {
             if (
               caresAboutDataChanges(
                 new Set([binding]),
@@ -355,7 +357,7 @@ export class ValidationController implements BindingTracker {
                     });
               });
             }
-          });
+          }
 
           if (newInvalidBindings.size > 0) {
             return newInvalidBindings;
@@ -582,7 +584,9 @@ export class ValidationController implements BindingTracker {
   }
 
   /** Executes all known validations for the tracked bindings using the given model */
-  validateView(trigger: Validation.Trigger = 'navigation'): {
+  validateView(
+    trigger: Validation.Trigger = 'navigation'
+  ): {
     /** Indicating if the view can proceed without error */
     canTransition: boolean;
 
