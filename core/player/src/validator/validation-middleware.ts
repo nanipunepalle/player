@@ -15,7 +15,7 @@ import type { ValidationResponse } from './types';
 /**
  * Returns a validation object if the data is invalid or an set of BindingsInstances if the binding itself is a weak ref of another invalid validation
  */
- export type MiddlewareChecker = (
+export type MiddlewareChecker = (
   binding: BindingInstance,
   model: DataModelImpl
 ) => ValidationResponse | Set<StrongOrWeakBinding> | undefined;

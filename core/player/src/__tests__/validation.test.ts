@@ -1,17 +1,17 @@
 import { omit } from 'timm';
-import { makeFlow } from '@player/make-flow';
+import { makeFlow } from '@player-ui/make-flow';
 import { waitFor } from '@testing-library/react';
-import type { Flow } from '@player/types';
-import type { SchemaController } from '@player/schema';
-import type { BindingParser } from '@player/binding';
+import type { Flow } from '@player-ui/types';
+import { setImmediate } from 'timers';
+import type { SchemaController } from '../schema';
+import type { BindingParser } from '../binding';
 import TrackBindingPlugin, { addValidator } from './helpers/binding.plugin';
 import { Player } from '..';
-import type { ValidationController } from '../validation';
+import type { ValidationController } from '../controllers/validation';
 import type { InProgressState } from '../types';
 import TestExpressionPlugin, {
   RequiredIfValidationProviderPlugin,
 } from './helpers/expression.plugin';
-
 
 async function runAllPromises() {
   await new Promise(setImmediate);
