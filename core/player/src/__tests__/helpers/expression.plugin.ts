@@ -1,5 +1,5 @@
-import type { Player, PlayerPlugin } from '../../player';
-import type {
+import { Player, PlayerPlugin } from '../../player';
+import {
   Binding,
   Expression,
   ExpressionHandler,

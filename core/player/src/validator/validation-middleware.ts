@@ -18,17 +18,7 @@ import type { ValidationResponse } from './types';
 export type MiddlewareChecker = (
   binding: BindingInstance,
   model: DataModelImpl
-) => ValidationResponse | Set<StrongOrWeakBinding> | undefined;
-
-/**
- * A BindingInstance with an indicator of whether or not it's a strong binding
- */
-export type StrongOrWeakBinding = {
-  /** BindingInstance in question */
-  binding: BindingInstance;
-  /** Boolean indicating whether the relevant BindingInscance is a strong binding */
-  isStrong: boolean;
-};
+) => ValidationResponse | Set<BindingInstance> | undefined;
 
 /**
  * Middleware for the data-model that caches the results of invalid data
@@ -66,15 +56,11 @@ export class ValidationMiddleware implements DataModelMiddleware {
 
     this.shadowModelPaths.forEach((value, binding) => {
       const validations = this.validator(binding, asModel);
+
       if (validations === undefined) {
         nextTransaction.push([binding, value]);
       } else if (validations instanceof Set) {
-        validations.forEach((validation) => {
-          invalidBindings.push(validation.binding);
-          if (!validation.isStrong) {
-            nextTransaction.push([validation.binding, value]);
-          }
-        });
+        invalidBindings.push(...validations);
       } else {
         this.logger?.debug(
           `Invalid value for path: ${binding.asString()} - ${
@@ -89,10 +75,7 @@ export class ValidationMiddleware implements DataModelMiddleware {
       nextTransaction.forEach(([binding]) =>
         this.shadowModelPaths.delete(binding)
       );
-      const result = next.set(nextTransaction, options);
-      if (invalidBindings.length === 0) {
-        return result;
-      }
+      return next.set(nextTransaction, options);
     }
 
     return invalidBindings.map((binding) => {
@@ -116,6 +99,7 @@ export class ValidationMiddleware implements DataModelMiddleware {
       this.shadowModelPaths.forEach((shadowValue, shadowBinding) => {
         if (shadowBinding === binding) {
           val = shadowValue;
+
           return;
         }
 
