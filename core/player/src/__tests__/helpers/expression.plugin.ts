@@ -1,11 +1,11 @@
-import { Player, PlayerPlugin } from '../../player';
-import {
+import type { Player, PlayerPlugin } from '../../player';
+import type {
   Binding,
   Expression,
   ExpressionHandler,
-  FormatType,
   ValidatorFunction,
 } from '../..';
+import { FormatType } from '../..';
 
 /**
  * Adds a validation provider to the validator registry

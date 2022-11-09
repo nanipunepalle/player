@@ -49,10 +49,26 @@ export class TypesProviderPlugin implements PlayerPlugin {
     if (this.config.validators) {
       player.hooks.validationController.tap(
         this.name,
-        (validationController) => {
+        (validationController: {
+          hooks: {
+            createValidatorRegistry: {
+              tap: (
+                arg0: string,
+                arg1: (validationRegistry: {
+                  register: (
+                    arg0: string,
+                    arg1: ValidatorFunction<any>
+                  ) => void;
+                }) => void
+              ) => void;
+            };
+          };
+        }) => {
           validationController.hooks.createValidatorRegistry.tap(
             this.name,
-            (validationRegistry) => {
+            (validationRegistry: {
+              register: (arg0: string, arg1: ValidatorFunction<any>) => void;
+            }) => {
               this.config.validators?.forEach(([name, handler]) => {
                 validationRegistry.register(name, handler);
               });

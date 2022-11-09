@@ -4,7 +4,7 @@ const DuplicatePackageCheckerPlugin = require('duplicate-package-checker-webpack
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 
 module.exports = (env, argv) => ({
-  entry: [path.resolve(__dirname, 'polyfills/index.ts'), '.'],
+  entry: '.',
   mode: argv.mode,
   devtool: 'none',
   output: {

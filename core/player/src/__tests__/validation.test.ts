@@ -1,17 +1,17 @@
 import { omit } from 'timm';
-import { makeFlow } from '@player-ui/make-flow';
+import { makeFlow } from '@player/make-flow';
 import { waitFor } from '@testing-library/react';
-import type { Flow } from '@player-ui/types';
-import { setImmediate } from 'timers';
-import type { SchemaController } from '../schema';
-import type { BindingParser } from '../binding';
+import type { Flow } from '@player/types';
+import type { SchemaController } from '@player/schema';
+import type { BindingParser } from '@player/binding';
 import TrackBindingPlugin, { addValidator } from './helpers/binding.plugin';
 import { Player } from '..';
-import type { ValidationController } from '../controllers/validation';
+import type { ValidationController } from '../validation';
 import type { InProgressState } from '../types';
 import TestExpressionPlugin, {
   RequiredIfValidationProviderPlugin,
 } from './helpers/expression.plugin';
+
 
 async function runAllPromises() {
   await new Promise(setImmediate);
@@ -439,15 +439,14 @@ test('alt APIs', async () => {
 
   // Updates when data is updated to throw an error
   state.controllers.data.set([['data.thing2', 'ginger']]);
-  await waitFor(() =>
-    expect(
-      state.controllers.view.currentView?.lastUpdate?.thing2.asset.validation
-    ).toMatchObject({
-      severity: 'error',
-      message: `Names just be in: frodo,sam`,
-      displayTarget: 'field',
-    })
-  );
+  await runAllPromises();
+  expect(
+    state.controllers.view.currentView?.lastUpdate?.thing2.asset.validation
+  ).toMatchObject({
+    severity: 'error',
+    message: `Names just be in: frodo,sam`,
+    displayTarget: 'field',
+  });
 
   expect(
     Array.from(
@@ -465,23 +464,22 @@ test('alt APIs', async () => {
   state.controllers.data.set([['data.thing5', 'sam']]);
   state.controllers.data.set([['data.thing6', 'frodo']]);
   state.controllers.data.set([['data.thing7', 'golumn']]);
+  await runAllPromises();
 
   // Gets all page errors for all children
-  await waitFor(() =>
-    expect(
-      Array.from(
-        state.controllers.view.currentView?.lastUpdate
-          ?.childValidations('page')
-          .values()
-      )
-    ).toMatchObject([
-      {
-        severity: 'error',
-        message: `Names just be in: frodo`,
-        displayTarget: 'page',
-      },
-    ])
-  );
+  expect(
+    Array.from(
+      state.controllers.view.currentView?.lastUpdate
+        ?.childValidations('page')
+        .values()
+    )
+  ).toMatchObject([
+    {
+      severity: 'error',
+      message: `Names just be in: frodo`,
+      displayTarget: 'page',
+    },
+  ]);
 
   // Gets all section errors for all children
   expect(
@@ -559,28 +557,27 @@ describe('validation', () => {
 
   describe('binding tracker', () => {
     it('tracks bindings in the view', () => {
-      expect(validationController?.getBindings().size).toStrictEqual(8);
+      expect(validationController!.getBindings().size).toStrictEqual(8);
     });
 
     it('preserves tracked bindings for non-updated things', () => {
-      expect(validationController?.getBindings().size).toStrictEqual(8);
+      expect(validationController!.getBindings().size).toStrictEqual(8);
 
       (player.getState() as InProgressState).controllers.data.set([
         ['not.there', false],
       ]);
-      expect(validationController?.getBindings().size).toStrictEqual(8);
+      expect(validationController!.getBindings().size).toStrictEqual(8);
     });
 
     it('drops bindings for non-applicable things', async () => {
-      expect(validationController?.getBindings().size).toStrictEqual(8);
+      expect(validationController!.getBindings().size).toStrictEqual(8);
 
       (player.getState() as InProgressState).controllers.data.set([
         ['applicability.thing3', false],
       ]);
 
-      await waitFor(() =>
-        expect(validationController?.getBindings().size).toStrictEqual(6)
-      );
+      await runAllPromises();
+      expect(validationController!.getBindings().size).toStrictEqual(6);
     });
   });
 
@@ -601,25 +598,21 @@ describe('validation', () => {
 
       // Updates when data is updated to throw an error
       state.controllers.data.set([['data.thing2', 'ginger']]);
-      await waitFor(() =>
-        expect(
-          state.controllers.view.currentView?.lastUpdate?.thing2.asset
-            .validation
-        ).toMatchObject({
-          severity: 'error',
-          message: `Names just be in: frodo,sam`,
-          displayTarget: 'field',
-        })
-      );
+      await runAllPromises();
+      expect(
+        state.controllers.view.currentView?.lastUpdate?.thing2.asset.validation
+      ).toMatchObject({
+        severity: 'error',
+        message: `Names just be in: frodo,sam`,
+        displayTarget: 'field',
+      });
 
       // Back to nothing when the error is fixed
       state.controllers.data.set([['data.thing2', 'frodo']]);
-      await waitFor(() =>
-        expect(
-          state.controllers.view.currentView?.lastUpdate?.thing2.asset
-            .validation
-        ).toBe(undefined)
-      );
+      await runAllPromises();
+      expect(
+        state.controllers.view.currentView?.lastUpdate?.thing2.asset.validation
+      ).toBe(undefined);
     });
   });
 
@@ -634,28 +627,24 @@ describe('validation', () => {
 
       // Updates when data is updated to throw an error
       state.controllers.data.set([['data.thing2', 'ginger']]);
-      await waitFor(() =>
-        expect(
-          state.controllers.view.currentView?.lastUpdate?.thing2.asset
-            .validation
-        ).toStrictEqual({
-          severity: 'error',
-          message: `Names just be in: frodo,sam`,
-          names: ['frodo', 'sam'],
-          displayTarget: 'field',
-          trigger: 'change',
-          type: 'names',
-        })
-      );
+      await runAllPromises();
+      expect(
+        state.controllers.view.currentView?.lastUpdate?.thing2.asset.validation
+      ).toStrictEqual({
+        severity: 'error',
+        message: `Names just be in: frodo,sam`,
+        names: ['frodo', 'sam'],
+        displayTarget: 'field',
+        trigger: 'change',
+        type: 'names',
+      });
 
       // Back to nothing when the error is fixed
       state.controllers.data.set([['data.thing2', 'frodo']]);
-      await waitFor(() =>
-        expect(
-          state.controllers.view.currentView?.lastUpdate?.thing2.asset
-            .validation
-        ).toBe(undefined)
-      );
+      await runAllPromises();
+      expect(
+        state.controllers.view.currentView?.lastUpdate?.thing2.asset.validation
+      ).toBe(undefined);
     });
   });
 
@@ -1023,6 +1012,7 @@ test('shows errors on load', () => {
     displayTarget: 'field',
   });
 });
+
 describe('errors', () => {
   const errorFlow = makeFlow({
     id: 'view-1',
@@ -1165,6 +1155,7 @@ describe('errors', () => {
     );
   });
 });
+
 describe('warnings', () => {
   const warningFlow = makeFlow({
     id: 'view-1',
@@ -1327,6 +1318,7 @@ describe('warnings', () => {
       'VIEW'
     );
   });
+
   it('warnings do not stop data saving', () => {
     const flow = makeFlow({
       asset: {
@@ -1560,15 +1552,14 @@ describe('validation within arrays', () => {
 
     // Error if set to an falsy value
     state.controllers.data.set([['thing.1.data.3.name', '']]);
-    await waitFor(() =>
-      expect(
-        state.controllers.view.currentView?.lastUpdate?.thing1.asset.validation
-      ).toMatchObject({
-        severity: 'error',
-        message: 'A value is required',
-        displayTarget: 'field',
-      })
-    );
+    await runAllPromises();
+    expect(
+      state.controllers.view.currentView?.lastUpdate?.thing1.asset.validation
+    ).toMatchObject({
+      severity: 'error',
+      message: 'A value is required',
+      displayTarget: 'field',
+    });
     expect(
       state.controllers.view.currentView?.lastUpdate?.thing2.asset.validation
     ).toBe(undefined);
@@ -1576,11 +1567,10 @@ describe('validation within arrays', () => {
     // Other one gets error if i try to navigate
     state.controllers.data.set([['thing.1.data.3.name', 'adam']]);
     state.controllers.flow.transition('anything');
-    await waitFor(() =>
-      expect(
-        state.controllers.view.currentView?.lastUpdate?.thing1.asset.validation
-      ).toBe(undefined)
-    );
+    await runAllPromises();
+    expect(
+      state.controllers.view.currentView?.lastUpdate?.thing1.asset.validation
+    ).toBe(undefined);
     expect(
       state.controllers.view.currentView?.lastUpdate?.thing2.asset.validation
     ).toMatchObject({
@@ -1698,18 +1688,16 @@ test('validations can run against formatted or deformatted values', async () => 
   ).toBeUndefined();
 
   state.controllers.data.set([['person.name', 'adam']], { formatted: true });
-  await waitFor(() =>
-    expect(
-      state.controllers.view.currentView?.lastUpdate?.validation.message
-    ).toBe('Names just be in: frodo,sam')
-  );
+  await runAllPromises();
+  expect(
+    state.controllers.view.currentView?.lastUpdate?.validation.message
+  ).toBe('Names just be in: frodo,sam');
 
   state.controllers.data.set([['person.name', 'sam']], { formatted: true });
-  await waitFor(() =>
-    expect(
-      state.controllers.view.currentView?.lastUpdate?.validation
-    ).toBeUndefined()
-  );
+  await runAllPromises();
+  expect(
+    state.controllers.view.currentView?.lastUpdate?.validation
+  ).toBeUndefined();
 });
 
 test('tracking a binding commits the default value', () => {
@@ -1833,6 +1821,9 @@ test('validates on expressions outside of view', async () => {
 
 describe('Validation applicability', () => {
   let player: Player;
+  let validationController: ValidationController;
+  let schema: SchemaController;
+  let parser: BindingParser;
 
   beforeEach(() => {
     player = new Player({
@@ -1840,6 +1831,15 @@ describe('Validation applicability', () => {
         new TrackBindingPlugin(),
         new RequiredIfValidationProviderPlugin(),
       ],
+    });
+    player.hooks.validationController.tap('test', (vc) => {
+      validationController = vc;
+    });
+    player.hooks.schema.tap('test', (s) => {
+      schema = s;
+    });
+    player.hooks.bindingParser.tap('test', (p) => {
+      parser = p;
     });
 
     player.start(flowWithApplicability);
@@ -1962,16 +1962,15 @@ describe('Validations with custom field messages', () => {
 
     state.controllers.data.set([['foo.data.thing1', 200.567]]);
 
-    await waitFor(() =>
-      expect(
-        state.controllers.view.currentView?.lastUpdate?.thing1.asset.validation
-      ).toMatchObject({
-        message:
-          'foo.data.thing1 is a number. You have provided a value of number, which is correct. But floored value, 200 is not equal to entered value, 200.567',
-        severity: 'error',
-        displayTarget: 'field',
-      })
-    );
+    await runAllPromises();
+    expect(
+      state.controllers.view.currentView?.lastUpdate?.thing1.asset.validation
+    ).toMatchObject({
+      message:
+        'foo.data.thing1 is a number. You have provided a value of number, which is correct. But floored value, 200 is not equal to entered value, 200.567',
+      severity: 'error',
+      displayTarget: 'field',
+    });
   });
 });
 
@@ -2043,14 +2042,14 @@ describe('Validations with multiple inputs', () => {
     ).toBeUndefined();
 
     state.controllers.data.set([['foo.b', 70]]);
-    await waitFor(() =>
-      expect(
-        state.controllers.view.currentView?.lastUpdate?.thing1.asset.validation
-      ).toMatchObject({
-        severity: 'error',
-        message: 'Both need to equal 100',
-      })
-    );
+    await runAllPromises();
+    expect(
+      state.controllers.view.currentView?.lastUpdate?.thing1.asset.validation
+    ).toMatchObject({
+      severity: 'error',
+      message: 'Both need to equal 100',
+    });
+
     expect(state.controllers.data.get('')).toMatchObject({
       foo: {
         a: 90,
@@ -2075,14 +2074,13 @@ describe('Validations with multiple inputs', () => {
     ).toBeUndefined();
 
     state.controllers.data.set([['foo.a', 15]]);
-    await waitFor(() =>
-      expect(
-        state.controllers.view.currentView?.lastUpdate?.thing1.asset.validation
-      ).toMatchObject({
-        severity: 'error',
-        message: 'Both need to equal 100',
-      })
-    );
+    await runAllPromises();
+    expect(
+      state.controllers.view.currentView?.lastUpdate?.thing1.asset.validation
+    ).toMatchObject({
+      severity: 'error',
+      message: 'Both need to equal 100',
+    });
 
     expect(
       state.controllers.data.get('', { includeInvalid: false })
@@ -2103,12 +2101,11 @@ describe('Validations with multiple inputs', () => {
     });
 
     state.controllers.data.set([['foo.b', 85]]);
+    await runAllPromises();
 
-    await waitFor(() =>
-      expect(
-        state.controllers.view.currentView?.lastUpdate?.thing1.asset.validation
-      ).toBeUndefined()
-    );
+    expect(
+      state.controllers.view.currentView?.lastUpdate?.thing1.asset.validation
+    ).toBeUndefined();
 
     expect(
       state.controllers.data.get('', { includeInvalid: false })
