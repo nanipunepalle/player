@@ -4,7 +4,7 @@ import type {
   ExpressionContext,
 } from '@player-ui/player';
 import type { SubscribeHandler } from './pubsub';
-import { pubsub } from './pubsub';
+import { pubsub, TinyPubSub } from './pubsub';
 import { PubSubPluginSymbol } from './symbols';
 
 export interface PubSubConfig {
@@ -27,6 +27,8 @@ export class PubSubPlugin implements PlayerPlugin {
   static Symbol = PubSubPluginSymbol;
   public readonly symbol = PubSubPlugin.Symbol;
 
+  protected pubsub: TinyPubSub;
+
   private expressionName: string;
 
   constructor(config?: PubSubConfig) {
@@ -34,6 +36,13 @@ export class PubSubPlugin implements PlayerPlugin {
   }
 
   apply(player: Player) {
+     // if there is already a pubsub plugin, reuse its pubsub instance
+    // to maintain the singleton across bundles for iOS/Android
+    const existing = player.findPlugin<PubSubPlugin>(PubSubPluginSymbol);
+    if (existing !== undefined) {
+      this.pubsub = existing.pubsub;
+    }
+
     player.hooks.expressionEvaluator.tap(this.name, (expEvaluator) => {
       const existingExpression = expEvaluator.operators.expressions.get(
         this.expressionName
@@ -67,7 +76,7 @@ export class PubSubPlugin implements PlayerPlugin {
    * @param data - Any additional data to attach to the event
    */
   publish(event: string, ...args: unknown[]) {
-    pubsub.publish(event, ...args);
+    this.pubsub.publish(event, ...args);
   }
 
   /**
@@ -81,7 +90,7 @@ export class PubSubPlugin implements PlayerPlugin {
     event: T,
     handler: SubscribeHandler<T, A>
   ) {
-    return pubsub.subscribe(event, handler);
+    return this.pubsub.subscribe(event, handler);
   }
 
   /**
@@ -90,13 +99,13 @@ export class PubSubPlugin implements PlayerPlugin {
    * @param token - A token from a `subscribe` call
    */
   unsubscribe(token: string) {
-    pubsub.unsubscribe(token);
+    this.pubsub.unsubscribe(token);
   }
 
   /**
    * Remove all subscriptions
    */
   clear() {
-    pubsub.clear();
+    this.pubsub.clear();
   }
 }

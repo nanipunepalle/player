@@ -75,6 +75,13 @@ const unparsedFlow: Flow = {
                 value: 'Highlights are ==not supported==',
               },
             },
+            {
+              asset: {
+                id: 'markdown-primaryInfo-collection-break',
+                type: 'markdown',
+                value: 'this is a **line break**\n\nthis is a *new paragraph*',
+              },
+            },
           ],
         },
       },
@@ -118,6 +125,7 @@ describe('MarkdownPlugin', () => {
         new MarkdownPlugin({
           text: mockMappers.text,
           paragraph: mockMappers.paragraph,
+          collection: mockMappers.collection,
         }),
       ],
     });
@@ -179,7 +187,11 @@ describe('MarkdownPlugin', () => {
     });
 
     // the parser should create 2 text assets: `Clicked {{count}}` and a italicized `times`:
-    expect(fingerprint.get('action-label-text-38')).toBe(1);
-    expect(fingerprint.get('action-label-text-39')).toBe(1);
+    const view = (player.getState() as InProgressState).controllers.view
+    .currentView?.lastUpdate;
+
+    expect(view).toMatchSnapshot();
+    expect(fingerprint.get('action-label-text-48')).toBe(1);
+    expect(fingerprint.get('action-label-text-49')).toBe(1);
   });
 });

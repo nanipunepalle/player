@@ -72,6 +72,7 @@ xcode/Pods/
 CoverageData/
 bep.json
 xcui.json
+./vendor
 
 # Bundles used by cocoapods for development
 ios/*/*/Resources/**/*.js

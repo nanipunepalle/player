@@ -1270,6 +1270,63 @@ describe('errors', () => {
     ],
   });
 
+  const oneInputWithErrorOnLoadBlockingFalseAndWarningNavigationTriggerFlow = makeFlow(
+    {
+      id: 'view-1',
+      type: 'view',
+      thing1: {
+        asset: {
+          id: 'thing-1',
+          binding: 'foo.data.thing1',
+          type: 'input',
+        },
+      },
+      validation: [
+        {
+          type: 'required',
+          ref: 'foo.data.thing1',
+          severity: 'error',
+          trigger: 'load',
+          blocking: 'false',
+        },
+        {
+          type: 'required',
+          ref: 'foo.data.thing1',
+          trigger: 'navigation',
+          severity: 'warning',
+        },
+      ],
+    }
+  );
+
+  const oneInputWithErrorOnLoadBlockingFalseAndWarningChangeTriggerFlow = makeFlow(
+    {
+      id: 'view-1',
+      type: 'view',
+      thing1: {
+        asset: {
+          id: 'thing-1',
+          binding: 'foo.data.thing1',
+          type: 'input',
+        },
+      },
+      validation: [
+        {
+          type: 'required',
+          ref: 'foo.data.thing1',
+          severity: 'error',
+          trigger: 'load',
+          blocking: 'false',
+        },
+        {
+          type: 'required',
+          ref: 'foo.data.thing1',
+          trigger: 'change',
+          severity: 'warning',
+        },
+      ],
+    });
+
   it('blocks navigation by default', async () => {
     const player = new Player({ plugins: [new TrackBindingPlugin()] });
     player.start(errorFlow);
@@ -1316,6 +1373,123 @@ describe('errors', () => {
     // Navigate _again_ this should dismiss it
     state.controllers.flow.transition('next');
     // We make it to the next state
+    expect(state.controllers.flow.current?.currentState?.value.state_type).toBe(
+      'END'
+    );
+  });
+
+  it('error on load blocking false then warning with change trigger on navigation attempt', async () => {
+    const player = new Player({ plugins: [new TrackBindingPlugin()] });
+    player.start(
+      oneInputWithErrorOnLoadBlockingFalseAndWarningChangeTriggerFlow
+    );
+    const state = player.getState() as InProgressState;
+
+    expect(
+      state.controllers.view.currentView?.lastUpdate?.thing1.asset.validation
+    ).toMatchObject({
+      message: 'A value is required',
+      severity: 'error',
+      displayTarget: 'field',
+    });
+
+    // Try to navigate, should prevent the navigation and display the warning
+    state.controllers.flow.transition('next');
+    expect(state.controllers.flow.current?.currentState?.value.state_type).toBe(
+      'VIEW'
+    );
+
+    expect(
+      state.controllers.view.currentView?.lastUpdate?.thing1.asset.validation
+    ).toMatchObject({
+      message: 'A value is required',
+      severity: 'warning',
+      displayTarget: 'field',
+    });
+
+    // Navigate _again_ this should dismiss it
+    state.controllers.flow.transition('next');
+    // We make it to the next state
+
+    expect(state.controllers.flow.current?.currentState?.value.state_type).toBe(
+      'END'
+    );
+  });
+
+  it('error on load blocking false then warning on navigation attempt', async () => {
+    const player = new Player({ plugins: [new TrackBindingPlugin()] });
+    player.start(
+      oneInputWithErrorOnLoadBlockingFalseAndWarningNavigationTriggerFlow
+    );
+    const state = player.getState() as InProgressState;
+
+    expect(
+      state.controllers.view.currentView?.lastUpdate?.thing1.asset.validation
+    ).toMatchObject({
+      message: 'A value is required',
+      severity: 'error',
+      displayTarget: 'field',
+    });
+
+    // Try to navigate, should prevent the navigation and display the warning
+    state.controllers.flow.transition('next');
+    expect(state.controllers.flow.current?.currentState?.value.state_type).toBe(
+      'VIEW'
+    );
+
+    expect(
+      state.controllers.view.currentView?.lastUpdate?.thing1.asset.validation
+    ).toMatchObject({
+      message: 'A value is required',
+      severity: 'warning',
+      displayTarget: 'field',
+    });
+
+    // Navigate _again_ this should dismiss it
+    state.controllers.flow.transition('next');
+    // We make it to the next state
+
+    expect(state.controllers.flow.current?.currentState?.value.state_type).toBe(
+      'END'
+    );
+  });
+
+  it('error on load blocking false then input active then warning on navigation attempt', async () => {
+    const player = new Player({ plugins: [new TrackBindingPlugin()] });
+    player.start(
+      oneInputWithErrorOnLoadBlockingFalseAndWarningNavigationTriggerFlow
+    );
+    const state = player.getState() as InProgressState;
+
+    expect(
+      state.controllers.view.currentView?.lastUpdate?.thing1.asset.validation
+    ).toMatchObject({
+      message: 'A value is required',
+      severity: 'error',
+      displayTarget: 'field',
+    });
+
+    // Type something to dismiss the error, should be empty to see the warning
+    state.controllers.data.set([['foo.data.thing1', '']]);
+
+    // Try to navigate, should prevent the navigation and display the warning
+    state.controllers.flow.transition('next');
+    expect(state.controllers.flow.current?.currentState?.value.state_type).toBe(
+      'VIEW'
+    );
+
+    expect(
+      state.controllers.view.currentView?.lastUpdate?.thing1.asset.validation
+    ).toMatchObject({
+      message: 'A value is required',
+      severity: 'warning',
+      displayTarget: 'field',
+    });
+
+    // Navigate _again_ this should dismiss it
+    state.controllers.flow.transition('next');
+    // We make it to the next state
+
     expect(state.controllers.flow.current?.currentState?.value.state_type).toBe(
       'END'
     );

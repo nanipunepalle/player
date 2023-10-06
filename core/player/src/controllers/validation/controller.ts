@@ -1,6 +1,7 @@
 import type { Validation } from '@player-ui/types';
 import { SyncHook, SyncWaterfallHook } from 'tapable-ts';
 
+import { setIn } from 'timm';
 import type { BindingInstance, BindingFactory } from '../../binding';
 import { isBinding } from '../../binding';
 import type { DataModelWithParser, DataModelMiddleware } from '../../data';
@@ -213,29 +214,40 @@ class ValidatedBinding {
         return obj;
       }
 
+      // treat all warnings the same and block it once (unless blocking is true)
       const blocking =
         obj.value.blocking ??
         ((obj.value.severity === 'warning' && 'once') || true);
 
+      /* eslint-disable-next-line */
+      obj = setIn(obj, ['value', 'blocking'], blocking);
+
       const isBlockingNavigation =
         blocking === true || (blocking === 'once' && !canDismiss);
 
-      const dismissable = canDismiss && blocking === 'once';
+      // As long as the warning is not blocking, once the warning shows up once, set its blocking to false so that it can be dismissed on next navigation trigger
 
       if (
         this.currentPhase === 'navigation' &&
         obj.state === 'active' &&
-        dismissable
+        obj.value.blocking !== true
       ) {
         if (obj.value.severity === 'warning') {
           const warn = obj as ActiveWarning;
-          if (warn.dismissable && warn.response.dismiss) {
+          if (
+            warn.dismissable &&
+            warn.response.dismiss &&
+            (warn.response.blocking !== 'once' || !warn.response.blocking)
+          ) {
             warn.response.dismiss();
           } else {
+            if (warn?.response.blocking === 'once') {
+              warn.response.blocking = false;
+            }
             warn.dismissable = true;
           }
 
-          return obj;
+          return warn as StatefulValidationObject;
         }
       }
 
@@ -275,6 +287,8 @@ class ValidatedBinding {
     canDismiss: boolean,
     runner: ValidationRunner
   ) {
+    const newApplicableValidations: StatefulValidationObject[] = [];
+
     if (phase === 'load' && this.currentPhase !== undefined) {
       // Tried to run the 'load' phase twice. Aborting
       return;
@@ -301,8 +315,24 @@ class ValidatedBinding {
       (this.currentPhase === 'load' || this.currentPhase === 'change')
     ) {
       // Can transition to a nav state from a change or load
+
+      // if there is an non-blocking error that is active then remove the error from applicable validations so it can no longer be shown
+      // which is needed if there are additional warnings to become active for that binding after the error is shown
+
+      this.applicableValidations.forEach((element) => {
+        if (
+          !(
+            element.type === 'error' &&
+            element.state === 'active' &&
+            element.isBlockingNavigation === false
+          )
+        ) {
+          newApplicableValidations.push(element);
+        }
+      });
+
       this.applicableValidations = [
-        ...this.applicableValidations,
+        ...newApplicableValidations,
         ...(this.currentPhase === 'load' ? this.validationsByState.change : []),
         ...this.validationsByState.navigation,
       ];
