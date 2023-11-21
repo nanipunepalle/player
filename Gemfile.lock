@@ -7,24 +7,23 @@ GIT
       starlark_compiler (~> 0.3)
 
 GIT
-  remote: https://github.com/hborawski/cocoapods-resource-bundle-copier.git
-  revision: d4ea0abf7b08c21887131923f4ccf3ad0919c7e7
-  specs:
-    cocoapods-resource-bundle-copier (0.0.1)
-
-GIT
   remote: https://github.com/hborawski/starlark_compiler.git
   revision: 544f76ebb29241e36aab75d2a5b6467eebdad856
   branch: build-file-path
   specs:
     starlark_compiler (0.5.0)
 
+PATH
+  remote: ../cocoapods-resource-bundle-copier
+  specs:
+    cocoapods-resource-bundle-copier (0.0.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
-    CFPropertyList (3.0.5)
+    CFPropertyList (3.0.6)
       rexml
-    activesupport (6.1.4.1)
+    activesupport (6.1.7.6)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
@@ -54,7 +53,7 @@ GEM
     aws-sigv4 (1.2.2)
       aws-eventstream (~> 1, >= 1.0.2)
     babosa (1.0.4)
-    claide (1.0.3)
+    claide (1.1.0)
     clamp (1.3.2)
     cocoapods (1.11.3)
       addressable (~> 2.8)
@@ -97,7 +96,7 @@ GEM
     colored2 (3.1.2)
     commander-fastlane (4.4.6)
       highline (~> 1.7.2)
-    concurrent-ruby (1.1.9)
+    concurrent-ruby (1.2.2)
     declarative (0.0.20)
     declarative-option (0.1.0)
     digest-crc (0.6.1)
@@ -191,7 +190,7 @@ GEM
     http-cookie (1.0.3)
       domain_name (~> 0.5)
     httpclient (2.8.3)
-    i18n (1.8.11)
+    i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     jazzy (0.13.5)
       cocoapods (~> 1.5)
@@ -209,8 +208,8 @@ GEM
     memoist (0.16.2)
     mini_magick (4.10.1)
     mini_mime (1.0.2)
-    mini_portile2 (2.4.0)
-    minitest (5.14.4)
+    mini_portile2 (2.8.5)
+    minitest (5.20.0)
     molinillo (0.8.0)
     multi_json (1.15.0)
     multipart-post (2.0.0)
@@ -219,12 +218,16 @@ GEM
     nap (1.1.0)
     naturally (2.2.0)
     netrc (0.11.0)
-    nokogiri (1.10.10)
-      mini_portile2 (~> 2.4.0)
+    nokogiri (1.15.5)
+      mini_portile2 (~> 2.8.2)
+      racc (~> 1.4)
+    nokogiri (1.15.5-x86_64-darwin)
+      racc (~> 1.4)
     open4 (1.3.4)
     os (1.1.1)
     plist (3.5.0)
     public_suffix (4.0.6)
+    racc (1.7.3)
     rake (13.0.1)
     redcarpet (3.5.0)
     representable (3.0.4)
@@ -232,7 +235,7 @@ GEM
       declarative-option (< 0.2.0)
       uber (< 0.2.0)
     retriable (3.1.2)
-    rexml (3.2.5)
+    rexml (3.2.6)
     rouge (2.0.7)
     ruby-macho (2.5.1)
     ruby2_keywords (0.0.2)
@@ -249,11 +252,11 @@ GEM
       CFPropertyList
       naturally
     slack-notifier (2.3.2)
-    slather (2.5.0)
+    slather (2.7.0)
       CFPropertyList (>= 2.2, < 4)
       activesupport
       clamp (~> 1.3)
-      nokogiri (~> 1.8)
+      nokogiri (~> 1.11)
       xcodeproj (~> 1.7)
     sqlite3 (1.4.2)
     terminal-notifier (2.0.0)
@@ -268,7 +271,7 @@ GEM
       tty-cursor (~> 0.7)
     typhoeus (1.4.0)
       ethon (>= 0.9.0)
-    tzinfo (2.0.4)
+    tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     uber (0.1.0)
     unf (0.1.4)
@@ -278,26 +281,18 @@ GEM
     word_wrap (1.0.0)
     xcinvoke (0.3.0)
       liferaft (~> 0.0.6)
-    xcodeproj (1.21.0)
+    xcodeproj (1.23.0)
       CFPropertyList (>= 2.3.3, < 4.0)
       atomos (~> 0.1.3)
       claide (>= 1.0.2, < 2.0)
       colored2 (~> 3.1)
       nanaimo (~> 0.3.0)
       rexml (~> 3.2.4)
-    xcov (1.7.5)
-      fastlane (>= 2.141.0, < 3.0.0)
-      multipart-post
-      slack-notifier
-      terminal-table
-      xcodeproj
-      xcresult (~> 0.2.0)
     xcpretty (0.3.0)
       rouge (~> 2.0.7)
     xcpretty-travis-formatter (1.0.0)
       xcpretty (~> 0.2, >= 0.0.7)
-    xcresult (0.2.1)
-    zeitwerk (2.5.1)
+    zeitwerk (2.6.12)
 
 PLATFORMS
   ruby
@@ -311,10 +306,9 @@ DEPENDENCIES
   fastlane
   ffi (= 1.15.5)
   jazzy
-  slather
+  slather (= 2.7.0)
   starlark_compiler!
   trainer
-  xcov
 
 BUNDLED WITH
    2.3.19

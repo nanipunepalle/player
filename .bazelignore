@@ -28,3 +28,4 @@ CoverageData/
 bep.json
 xcui.json
 ios/*/*/Resources/**/*.js
+.build

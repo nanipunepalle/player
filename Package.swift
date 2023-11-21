@@ -100,7 +100,7 @@ let package = Package(
                 .product(name: "SwiftHooks", package: "swift-hooks"),
                 .target(name: "PlayerUILogger")
             ],
-            path: "ios/Sources/core",
+            path: "ios/Sources/packages/core",
             resources: [
                 .process("Resources")
             ]
@@ -111,14 +111,14 @@ let package = Package(
                 .product(name: "SwiftHooks", package: "swift-hooks"),
                 .target(name: "PlayerUI")
             ],
-            path: "ios/Sources/swiftui"
+            path: "ios/Sources/packages/swiftui"
         ),
         .target(
             name: "PlayerUILogger",
             dependencies: [
                 .product(name: "SwiftHooks", package: "swift-hooks"),
             ],
-            path: "ios/Sources/logger"
+            path: "ios/Sources/packages/logger"
         ),
         .target(
             name: "PlayerUIReferenceAssets",
@@ -128,7 +128,7 @@ let package = Package(
                 .target(name: "PlayerUIBeaconPlugin"),
                 .target(name: "PlayerUISwiftUIPendingTransactionPlugin")
             ],
-            path: "ios/Sources/reference-assets",
+            path: "ios/Sources/packages/reference-assets",
             resources: [
                 .process("Resources")
             ]
@@ -139,7 +139,7 @@ let package = Package(
                 .target(name: "PlayerUI"),
                 .target(name: "PlayerUISwiftUI")
             ],
-            path: "ios/Sources/test-utils-core",
+            path: "ios/Sources/packages/test-utils-core",
             resources: [
                 .process("Resources")
             ]
@@ -150,7 +150,7 @@ let package = Package(
                 .target(name: "PlayerUI"),
                 .target(name: "PlayerUITestUtilitiesCore")
             ],
-            path: "ios/Sources/test-utils"
+            path: "ios/Sources/packages/test-utils"
         ),
 
         // Plugins with dependencies
