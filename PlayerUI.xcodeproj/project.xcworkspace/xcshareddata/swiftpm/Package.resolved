@@ -11,6 +11,15 @@
         }
       },
       {
+        "package": "EyesXCUI",
+        "repositoryURL": "https://github.com/applitools/eyes-xcui-swift-package",
+        "state": {
+          "branch": null,
+          "revision": "ba8bc9221d1f5ca733d794d9c85ad017df9e0423",
+          "version": "8.9.1"
+        }
+      },
+      {
         "package": "GraphViz",
         "repositoryURL": "https://github.com/SwiftDocOrg/GraphViz.git",
         "state": {
