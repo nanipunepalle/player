@@ -9,8 +9,9 @@
 import Foundation
 import XCTest
 import JavaScriptCore
-
 @testable import PlayerUI
+@testable import PlayerUISwiftUI
+
 class WrappedFunctionTests: XCTestCase {
     let context: JSContext = JSContext()
 
@@ -155,7 +156,7 @@ class WrappedFunctionTests: XCTestCase {
             XCTAssertEqual(
                 WrappedFunction<Int>.Error.promiseFailed(
                     error: """
-                                (extension in PlayerUI):PlayerUI.WrappedFunction<Swift.Int>.Error.promiseFailed(error: \"Error: promise rejected\")
+                                (extension in PlayerUISwiftUI):PlayerUISwiftUI.WrappedFunction<Swift.Int>.Error.promiseFailed(error: \"Error: promise rejected\")
                                 """),
                 WrappedFunction<Int>.Error.promiseFailed(error: error.playerDescription))
         }

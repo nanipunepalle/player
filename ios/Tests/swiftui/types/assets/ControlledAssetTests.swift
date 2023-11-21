@@ -11,6 +11,7 @@ import XCTest
 import JavaScriptCore
 import Combine
 @testable import PlayerUI
+@testable import PlayerUISwiftUI
 @testable import PlayerUILogger
 
 class ControlledAssetTests: XCTestCase {

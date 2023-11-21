@@ -7,7 +7,8 @@
 
 import SwiftUI
 import Combine
-import PlayerUI
+@testable import PlayerUI
+@testable import PlayerUISwiftUI
 
 /**
  Data Decoded by Player for `ChoiceAssetData`

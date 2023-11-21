@@ -12,6 +12,7 @@ import JavaScriptCore
 import Combine
 import SwiftUI
 @testable import PlayerUI
+@testable import PlayerUISwiftUI
 @testable import PlayerUILogger
 @testable import PlayerUIReferenceAssets
 
