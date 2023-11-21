@@ -1,4 +1,7 @@
 import SwiftUI
+#if SWIFT_PACKAGE
+import PlayerUI
+#endif
 
 /// A plugin to wrap player content in a scrollview
 /// and provide `EnvironmentValues` for

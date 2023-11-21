@@ -9,6 +9,9 @@ import Foundation
 import SwiftUI
 import Combine
 import JavaScriptCore
+#if SWIFT_PACKAGE
+import PlayerUI
+#endif
 
 /**
  An error type for errors from `ManagedPlayer`

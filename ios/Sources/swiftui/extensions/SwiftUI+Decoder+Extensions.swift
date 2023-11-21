@@ -6,6 +6,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import PlayerUI
+#endif
 
 /// A function that decodes a `SwiftUIAsset`
 public typealias DecodeSwiftUIFunction = ((Any) throws -> SwiftUIAsset?)

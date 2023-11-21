@@ -7,6 +7,7 @@
 
 import JavaScriptCore
 #if SWIFT_PACKAGE
+import PlayerUI
 import PlayerUILogger
 #endif
 

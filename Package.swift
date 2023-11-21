@@ -12,7 +12,6 @@ let pluginList: [String] = [
     "ComputedPropertiesPlugin",
     "ExpressionPlugin",
     "ExternalActionPlugin",
-    "MetricsPlugin",
     "PubSubPlugin",
     "StageRevertDataPlugin",
     "TypesProviderPlugin"
@@ -30,7 +29,7 @@ let package = Package(
         // Core
         .library(
             name: "PlayerUI",
-            targets: ["PlayerUI"]
+            targets: ["PlayerUI", "PlayerUISwiftUI"]
         ),
         
         // Packages
@@ -59,6 +58,10 @@ let package = Package(
         .library(
             name: "PlayerUIExternalActionViewModifierPlugin",
             targets: ["PlayerUIExternalActionViewModifierPlugin"]
+        ),
+        .library(
+            name: "PlayerUIMetricsPlugin",
+            targets: ["PlayerUIMetricsPlugin"]
         ),
         .library(
             name: "PlayerUISwiftUICheckPathPlugin",
@@ -97,17 +100,18 @@ let package = Package(
                 .product(name: "SwiftHooks", package: "swift-hooks"),
                 .target(name: "PlayerUILogger")
             ],
-            path: "ios/Sources",
-            exclude: [
-                "reference-assets",
-                "logger",
-                "plugins",
-                "test-utils-core",
-                "test-utils"
-            ],
+            path: "ios/Sources/core",
             resources: [
-                .process("core/Resources")
+                .process("Resources")
             ]
+        ),
+        .target(
+            name: "PlayerUISwiftUI",
+            dependencies: [
+                .product(name: "SwiftHooks", package: "swift-hooks"),
+                .target(name: "PlayerUI")
+            ],
+            path: "ios/Sources/swiftui"
         ),
         .target(
             name: "PlayerUILogger",
@@ -132,7 +136,8 @@ let package = Package(
         .target(
             name: "PlayerUITestUtilitiesCore",
             dependencies: [
-                .target(name: "PlayerUI")
+                .target(name: "PlayerUI"),
+                .target(name: "PlayerUISwiftUI")
             ],
             path: "ios/Sources/test-utils-core",
             resources: [
@@ -153,14 +158,27 @@ let package = Package(
             name: "PlayerUIBeaconPlugin",
             dependencies: [
                 .target(name: "PlayerUI"),
+                .target(name: "PlayerUISwiftUI"),
                 .target(name: "PlayerUIBaseBeaconPlugin")
             ],
             path: "ios/Sources/plugins/BeaconPlugin"
         ),
         .target(
+            name: "PlayerUIMetricsPlugin",
+            dependencies: [
+                .target(name: "PlayerUI"),
+                .target(name: "PlayerUISwiftUI")
+            ],
+            path: "ios/Sources/plugins/MetricsPlugin",
+            resources: [
+                .process("Resources")
+            ]
+        ),
+        .target(
             name: "PlayerUISwiftUICheckPathPlugin",
             dependencies: [
                 .target(name: "PlayerUI"),
+                .target(name: "PlayerUISwiftUI"),
                 .target(name: "PlayerUICheckPathPlugin")
             ],
             path: "ios/Sources/plugins/SwiftUICheckPathPlugin"
@@ -169,6 +187,7 @@ let package = Package(
             name: "PlayerUIExternalActionViewModifierPlugin",
             dependencies: [
                 .target(name: "PlayerUI"),
+                .target(name: "PlayerUISwiftUI"),
                 .target(name: "PlayerUIExternalActionPlugin")
             ],
             path: "ios/Sources/plugins/ExternalActionViewModifierPlugin"
@@ -184,14 +203,16 @@ let package = Package(
         .target(
             name: "PlayerUISwiftUIPendingTransactionPlugin",
             dependencies: [
-                .target(name: "PlayerUI")
+                .target(name: "PlayerUI"),
+                .target(name: "PlayerUISwiftUI")
             ],
             path: "ios/Sources/plugins/SwiftUIPendingTransactionPlugin"
         ),
         .target(
             name: "PlayerUITransitionPlugin",
             dependencies: [
-                .target(name: "PlayerUI")
+                .target(name: "PlayerUI"),
+                .target(name: "PlayerUISwiftUI")
             ],
             path: "ios/Sources/plugins/TransitionPlugin"
         )

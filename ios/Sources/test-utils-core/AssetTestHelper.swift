@@ -2,6 +2,7 @@ import Foundation
 import JavaScriptCore
 #if SWIFT_PACKAGE
 import PlayerUI
+import PlayerUISwiftUI
 import PlayerUILogger
 #endif
 

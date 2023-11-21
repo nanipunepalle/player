@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 #if SWIFT_PACKAGE
 import PlayerUI
+import PlayerUISwiftUI
 #endif
 
 /**

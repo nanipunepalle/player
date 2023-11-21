@@ -5,6 +5,10 @@
 //  Created by Harris Borawski on 2/26/21.
 //
 
+#if SWIFT_PACKAGE
+import PlayerUI
+#endif
+
 /**
  Represents the wrapping object that contains a SwiftUIAsset
  The JS Player will return assets in the format

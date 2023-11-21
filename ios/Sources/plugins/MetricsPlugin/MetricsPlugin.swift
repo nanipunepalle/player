@@ -10,6 +10,7 @@ import JavaScriptCore
 import SwiftUI
 #if SWIFT_PACKAGE
 import PlayerUI
+import PlayerUISwiftUI
 #endif
 
 /// A Plugin that provides request time data to `MetricsPlugin`

@@ -7,6 +7,9 @@
 
 import Foundation
 import Combine
+#if SWIFT_PACKAGE
+import PlayerUI
+#endif
 
 /// A state object to return from a FlowManager to advance
 public enum NextState {

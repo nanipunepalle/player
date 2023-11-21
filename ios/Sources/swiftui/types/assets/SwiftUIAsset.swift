@@ -7,6 +7,9 @@
 
 import JavaScriptCore
 import SwiftUI
+#if SWIFT_PACKAGE
+import PlayerUI
+#endif
 
 /**
  A base class representing a Player Asset that will be rendering using SwiftUI

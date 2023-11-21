@@ -7,6 +7,9 @@
 
 import Combine
 import SwiftUI
+#if SWIFT_PACKAGE
+import PlayerUI
+#endif
 
 /**
  A ViewModel that contains decoded AssetData for an Asset

@@ -7,6 +7,9 @@
 
 import Foundation
 import Combine
+#if SWIFT_PACKAGE
+import PlayerUI
+#endif
 
 /**
  A `FlowManager` implementation that advances through an array of flows on each

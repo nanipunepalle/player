@@ -10,6 +10,7 @@ import JavaScriptCore
 import SwiftUI
 #if SWIFT_PACKAGE
 import PlayerUI
+import PlayerUISwiftUI
 import PlayerUIBaseBeaconPlugin
 #endif
 

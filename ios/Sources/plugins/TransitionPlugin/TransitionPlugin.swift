@@ -3,6 +3,7 @@ import SwiftUI
 import SwiftHooks
 #if SWIFT_PACKAGE
 import PlayerUI
+import PlayerUISwiftUI
 #endif
 
 /**
