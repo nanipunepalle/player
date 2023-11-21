@@ -73,6 +73,10 @@ CoverageData/
 bep.json
 xcui.json
 
+# Swift Package Manager
+.build
+.swiftpm
+
 # Bundles used by cocoapods for development
 ios/*/*/Resources/**/*.js
 

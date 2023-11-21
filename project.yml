@@ -1,0 +1,53 @@
+name: PlayerUI
+packages:
+  PlayerUI:
+    path: .
+configs:
+  AdHoc: debug
+  Debug: debug
+  Release: release
+options:
+  # prevents BUNDLE_LOADER from being added to test target
+  # which was preventing code coverage for unit tests
+  settingPresets: project
+targets:
+  PlayerUIDemo:
+    type: application
+    sources: ./xcode/demo
+    platform: iOS
+    deploymentTarget: "14.0"
+    settings:
+      base:
+        # https://github.com/yonaskolb/XcodeGen/blob/3757f82bf6ed3916235828a3e3d64fa0c787d564/SettingPresets/Product_Platform/application_iOS.yml
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        CODE_SIGN_IDENTITY: iPhone Developer
+
+        # https://github.com/yonaskolb/XcodeGen/blob/3757f82bf6ed3916235828a3e3d64fa0c787d564/SettingPresets/Platforms/iOS.yml
+        LD_RUNPATH_SEARCH_PATHS: ["$(inherited)", "@executable_path/Frameworks"]
+        SDKROOT: iphoneos
+        TARGETED_DEVICE_FAMILY: '1,2'
+
+        DEVELOPMENT_TEAM: F6DWWXWEX6
+        PRODUCT_BUNDLE_IDENTIFIER: com.intuit.ios.player
+      configs:
+        adhoc:
+          CODE_SIGN_STYLE: Automatic
+        debug:
+          CODE_SIGN_STYLE: Manual
+          PROVISIONING_PROFILE_SPECIFIER: "match InHouse com.intuit.ios.player"
+          CODE_SIGN_IDENTITY: "iPhone Distribution"
+        release:
+          CODE_SIGN_STYLE: Manual
+          PROVISIONING_PROFILE_SPECIFIER: "match InHouse com.intuit.ios.player"
+          CODE_SIGN_IDENTITY: "iPhone Distribution"
+    dependencies:
+      - package: PlayerUI
+        product: PlayerUI
+      - package: PlayerUI
+        product: PlayerUIReferenceAssets
+      - package: PlayerUI
+        product: PlayerUICommonTypesPlugin
+      - package: PlayerUI
+        product: PlayerUIExpressionPlugin
+      - package: PlayerUI
+        product: PlayerUIBeaconPlugin
