@@ -71,3 +71,31 @@ targets:
         product: PlayerUITransitionPlugin
       - package: PlayerUI
         product: PlayerUITypesProviderPlugin
+  Tests:
+    type: bundle.unit-test
+    platform: iOS
+    deploymentTarget: "14.0"
+    sources:
+      - path: ./ios/Tests
+      - path: ./ios/TestUtilities
+    info:
+      path: Tests/Info.plist
+    settings:
+      TEST_HOST: $(BUILT_PRODUCTS_DIR)/PlayerUIDemo.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PlayerUIDemo
+      TEST_TARGET_NAME: PlayerUIDemo
+      SDKROOT: iphoneos
+      TARGETED_DEVICE_FAMILY: '1,2'
+      # default from settingPreset https://github.com/yonaskolb/XcodeGen/blob/3757f82bf6ed3916235828a3e3d64fa0c787d564/SettingPresets/Products/bundle.unit-test.yml
+      LD_RUNPATH_SEARCH_PATHS: ["$(inherited)", "@loader_path/Frameworks"]
+      CODE_SIGN_STYLE: Manual
+      DEVELOPMENT_TEAM: F6DWWXWEX6
+      PRODUCT_BUNDLE_IDENTIFIER: com.intuit.ios.player
+      CODE_SIGN_IDENTITY: "iPhone Distribution"
+    dependencies:
+      - target: PlayerUIDemo
+      - package: PlayerUI
+        product: PlayerUI
+      - package: PlayerUI
+        product: PlayerUILogger
+      - package: PlayerUI
+        product: PlayerUIMetricsPlugin

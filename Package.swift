@@ -36,6 +36,10 @@ let package = Package(
             targets: ["PlayerUIReferenceAssets"]
         ),
         .library(
+            name: "PlayerUILogger",
+            targets: ["PlayerUILogger"]
+        ),
+        .library(
             name: "PlayerUIBeaconPlugin",
             targets: ["PlayerUIBeaconPlugin"]
         ),
