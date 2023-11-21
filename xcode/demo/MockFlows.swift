@@ -1,6 +1,8 @@
 // swiftlint:disable all
 import PlayerUI
-import PlayerUITestUtilities
+#if SWIFT_PACKAGE
+import PlayerUITestUtilitiesCore
+#endif
 
 public struct MockFlows {
     static let actionCounter: String = """

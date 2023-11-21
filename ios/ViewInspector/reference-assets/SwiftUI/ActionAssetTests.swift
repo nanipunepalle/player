@@ -15,6 +15,7 @@ import ViewInspector
 @testable import PlayerUISwiftUI
 @testable import PlayerUIReferenceAssets
 @testable import PlayerUIBeaconPlugin
+@testable import PlayerUITestUtilities
 
 extension ActionAssetView: Inspectable {}
 

@@ -14,6 +14,7 @@ import XCTest
 @testable import PlayerUI
 @testable import PlayerUISwiftUI
 @testable import PlayerUIReferenceAssets
+@testable import PlayerUITestUtilities
 
 extension InfoAssetView: Inspectable {}
 

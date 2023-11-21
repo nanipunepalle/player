@@ -8,6 +8,7 @@
 
 import UIKit
 import PlayerUI
+#if SWIFT_PACKAGE
 import PlayerUIReferenceAssets
 import PlayerUICommonTypesPlugin
 import PlayerUIExpressionPlugin
@@ -23,7 +24,8 @@ import PlayerUIPubSubPlugin
 import PlayerUITransitionPlugin
 import PlayerUITypesProviderPlugin
 import PlayerUISwiftUIPendingTransactionPlugin
-import PlayerUITestUtilities
+import PlayerUITestUtilitiesCore
+#endif
 
 import SwiftUI
 import Combine

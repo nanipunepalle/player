@@ -182,7 +182,7 @@ and display it as a SwiftUI view comprised of registered assets.
 
     utils.source_files = 'ios/Sources/packages/test-utils-core/**/*.swift'
     utils.resource_bundles = {
-      'TestUtilities' => ['ios/Sources/packages/test-utils/Resources/**/*.js']
+      'TestUtilities' => ['ios/Sources/packages/test-utils-core/Resources/**/*.js']
     }
   end
 

@@ -10,9 +10,12 @@ import JavaScriptCore
 import SwiftUI
 import Combine
 import XCTest
+
+#if SWIFT_PACKAGE
 import PlayerUI
 import PlayerUISwiftUI
 import PlayerUITestUtilitiesCore
+#endif
 
 /**
  A base class to use for SwiftUIAsset unit tests

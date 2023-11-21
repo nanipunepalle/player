@@ -13,6 +13,7 @@ import SwiftUI
 @testable import PlayerUI
 @testable import PlayerUISwiftUI
 @testable import PlayerUIReferenceAssets
+@testable import PlayerUITestUtilities
 
 class ValidationTests: SwiftUIAssetUnitTestCase {
     func testErrorValidation() {

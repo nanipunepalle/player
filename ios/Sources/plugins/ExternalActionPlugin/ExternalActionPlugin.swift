@@ -73,5 +73,7 @@ public class ExternalActionPlugin: JSBasePlugin, NativePlugin {
         #endif
     }
 
+    #if SWIFT_PACKAGE
     public static let bundle = Bundle.module
+    #endif
 }

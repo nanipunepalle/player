@@ -150,7 +150,8 @@ let package = Package(
                 .target(name: "PlayerUI"),
                 .target(name: "PlayerUITestUtilitiesCore")
             ],
-            path: "ios/Sources/packages/test-utils"
+            path: "ios/Sources/packages/test-utils",
+            linkerSettings: [.linkedFramework("XCTest")]
         ),
 
         // Plugins with dependencies

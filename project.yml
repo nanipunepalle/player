@@ -35,6 +35,9 @@ targets:
 
         DEVELOPMENT_TEAM: F6DWWXWEX6
         PRODUCT_BUNDLE_IDENTIFIER: com.intuit.ios.player
+
+        SKIP_INSTALL: 'NO'
+        SKIP_INSTALLED_PRODUCT: 'YES'
       configs:
         adhoc:
           CODE_SIGN_STYLE: Automatic
@@ -78,7 +81,7 @@ targets:
       - package: PlayerUI
         product: PlayerUITypesProviderPlugin
       - package: PlayerUI
-        product: PlayerUITestUtilities
+        product: PlayerUITestUtilitiesCore
   Tests:
     type: bundle.unit-test
     platform: iOS
@@ -132,7 +135,7 @@ targets:
       - package: PlayerUI
         product: PlayerUIReferenceAssets
       - package: PlayerUI
-        product: PlayerUITestUtilitiesCore
+        product: PlayerUITestUtilities
 
   ViewInspectorTests:
     type: bundle.ui-testing
@@ -174,7 +177,7 @@ targets:
       - package: PlayerUI
         product: PlayerUIReferenceAssets
       - package: PlayerUI
-        product: PlayerUITestUtilitiesCore
+        product: PlayerUITestUtilities
   XCUITests:
     type: bundle.ui-testing
     platform: iOS
@@ -215,4 +218,4 @@ targets:
       - package: PlayerUI
         product: PlayerUIReferenceAssets
       - package: PlayerUI
-        product: PlayerUITestUtilitiesCore
+        product: PlayerUITestUtilities

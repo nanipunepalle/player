@@ -123,7 +123,9 @@ def PlayerUI(
                 exclude_directories = 0,
             ),
             "TestUtilities": glob(
-                ["ios/Sources/packages/test-utils/Resources/**/*.js"],
+                [
+                    "ios/Sources/packages/test-utils-core/Resources/**/*.js",
+                ],
                 exclude_directories = 0,
             ),
             "TypesProviderPlugin": glob(
