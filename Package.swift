@@ -27,10 +27,13 @@ let package = Package(
         .macOS(.v11)
     ],
     products: [
+        // Core
         .library(
             name: "PlayerUI",
             targets: ["PlayerUI"]
         ),
+        
+        // Packages
         .library(
             name: "PlayerUIReferenceAssets",
             targets: ["PlayerUIReferenceAssets"]
@@ -39,6 +42,16 @@ let package = Package(
             name: "PlayerUILogger",
             targets: ["PlayerUILogger"]
         ),
+        .library(
+            name: "PlayerUITestUtilitiesCore",
+            targets: ["PlayerUITestUtilitiesCore"]
+        ),
+        .library(
+            name: "PlayerUITestUtilities",
+            targets: ["PlayerUITestUtilities"]
+        ),
+
+        // Plugins
         .library(
             name: "PlayerUIBeaconPlugin",
             targets: ["PlayerUIBeaconPlugin"]
@@ -88,7 +101,9 @@ let package = Package(
             exclude: [
                 "reference-assets",
                 "logger",
-                "plugins"
+                "plugins",
+                "test-utils-core",
+                "test-utils"
             ],
             resources: [
                 .process("core/Resources")
@@ -113,6 +128,24 @@ let package = Package(
             resources: [
                 .process("Resources")
             ]
+        ),
+        .target(
+            name: "PlayerUITestUtilitiesCore",
+            dependencies: [
+                .target(name: "PlayerUI")
+            ],
+            path: "ios/Sources/test-utils-core",
+            resources: [
+                .process("Resources")
+            ]
+        ),
+        .target(
+            name: "PlayerUITestUtilities",
+            dependencies: [
+                .target(name: "PlayerUI"),
+                .target(name: "PlayerUITestUtilitiesCore")
+            ],
+            path: "ios/Sources/test-utils"
         ),
 
         // Plugins with dependencies

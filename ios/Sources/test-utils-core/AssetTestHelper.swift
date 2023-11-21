@@ -1,6 +1,7 @@
 import Foundation
 import JavaScriptCore
 #if SWIFT_PACKAGE
+import PlayerUI
 import PlayerUILogger
 #endif
 
@@ -13,13 +14,24 @@ extension JSContext {
     func loadMakeFlow() {
         guard objectForKeyedSubscript("MakeFlow").isUndefined else { return }
         guard
-            let url = ResourceUtilities.urlForFile(
-                name: "make-flow.prod",
-                ext: "js",
-                bundle: Bundle(for: MakeFlowResourceShim.self), pathComponent: "TestUtilities.bundle"),
+            let url = makeFlowBundle,
             let contents = try? String(contentsOf: url)
         else { return }
         evaluateScript(contents)
+    }
+
+    var makeFlowBundle: URL? {
+        #if SWIFT_PACKAGE
+        ResourceUtilities.urlForFile(
+            name: "make-flow.prod",
+            ext: "js",
+            bundle: Bundle.module)
+        #else
+        ResourceUtilities.urlForFile(
+            name: "make-flow.prod",
+            ext: "js",
+            bundle: Bundle(for: MakeFlowResourceShim.self), pathComponent: "TestUtilities.bundle")
+        #endif
     }
 }
 

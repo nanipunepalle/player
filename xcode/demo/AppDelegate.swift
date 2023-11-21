@@ -23,6 +23,8 @@ import PlayerUIPubSubPlugin
 import PlayerUITransitionPlugin
 import PlayerUITypesProviderPlugin
 import PlayerUISwiftUIPendingTransactionPlugin
+import PlayerUITestUtilities
+
 import SwiftUI
 import Combine
 

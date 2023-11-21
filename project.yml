@@ -71,6 +71,8 @@ targets:
         product: PlayerUITransitionPlugin
       - package: PlayerUI
         product: PlayerUITypesProviderPlugin
+      - package: PlayerUI
+        product: PlayerUITestUtilities
   Tests:
     type: bundle.unit-test
     platform: iOS
@@ -99,3 +101,7 @@ targets:
         product: PlayerUILogger
       - package: PlayerUI
         product: PlayerUIMetricsPlugin
+      - package: PlayerUI
+        product: PlayerUIPrintLoggerPlugin
+      - package: PlayerUI
+        product: PlayerUIReferenceAssets

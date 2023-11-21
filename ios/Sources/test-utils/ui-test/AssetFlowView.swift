@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import PlayerUI
 /**
  SwiftUI View to wrap the `SwiftUIPlayer` in a scroll view and handle the result
  for use in UI testing
