@@ -40,6 +40,10 @@ let package = Package(
             targets: ["PlayerUIBeaconPlugin"]
         ),
         .library(
+            name: "PlayerUIExternalActionViewModifierPlugin",
+            targets: ["PlayerUIExternalActionViewModifierPlugin"]
+        ),
+        .library(
             name: "PlayerUISwiftUICheckPathPlugin",
             targets: ["PlayerUISwiftUICheckPathPlugin"]
         ),
@@ -123,6 +127,14 @@ let package = Package(
                 .target(name: "PlayerUICheckPathPlugin")
             ],
             path: "ios/Sources/plugins/SwiftUICheckPathPlugin"
+        ),
+        .target(
+            name: "PlayerUIExternalActionViewModifierPlugin",
+            dependencies: [
+                .target(name: "PlayerUI"),
+                .target(name: "PlayerUIExternalActionPlugin")
+            ],
+            path: "ios/Sources/plugins/ExternalActionViewModifierPlugin"
         ),
         .target(
             name: "PlayerUISwiftUIPendingTransactionPlugin",

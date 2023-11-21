@@ -16,6 +16,7 @@ import PlayerUIBaseBeaconPlugin
 import PlayerUICommonExpressionsPlugin
 import PlayerUISwiftUICheckPathPlugin
 import PlayerUIExternalActionPlugin
+import PlayerUIExternalActionViewModifierPlugin
 import PlayerUIMetricsPlugin
 import PlayerUIPubSubPlugin
 import PlayerUITransitionPlugin
@@ -77,7 +78,10 @@ class SceneDelegate: UIResponder, UISceneDelegate {
         TypesProviderPlugin(types: [], validators: [], formats: []),
         TransitionPlugin(popTransition: .pop),
         BeaconPlugin<DefaultBeacon> { print(String(describing: $0)) },
-        SwiftUIPendingTransactionPlugin<PendingTransactionPhases>()
+        SwiftUIPendingTransactionPlugin<PendingTransactionPhases>(),
+        ExternalActionViewModifierPlugin<ExternalStateSheetModifier>(handler: { state, controllers, transition in
+            AnyView(Button(action: { transition("next") }, label: { Text("Next") }))
+        })
     ]
 
     var window: UIWindow?

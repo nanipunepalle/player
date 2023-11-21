@@ -46,21 +46,23 @@ targets:
       - package: PlayerUI
         product: PlayerUIReferenceAssets
       - package: PlayerUI
-        product: PlayerUICommonTypesPlugin
-      - package: PlayerUI
-        product: PlayerUIExpressionPlugin
-      - package: PlayerUI
         product: PlayerUIBeaconPlugin
       - package: PlayerUI
         product: PlayerUICommonExpressionsPlugin
       - package: PlayerUI
-        product: PlayerUISwiftUICheckPathPlugin
+        product: PlayerUICommonTypesPlugin
+      - package: PlayerUI
+        product: PlayerUIExpressionPlugin
       - package: PlayerUI
         product: PlayerUIExternalActionPlugin
+      - package: PlayerUI
+        product: PlayerUIExternalActionViewModifierPlugin
       - package: PlayerUI
         product: PlayerUIMetricsPlugin
       - package: PlayerUI
         product: PlayerUIPubSubPlugin
+      - package: PlayerUI
+        product: PlayerUISwiftUICheckPathPlugin
       - package: PlayerUI
         product: PlayerUISwiftUIPendingTransactionPlugin
       - package: PlayerUI
