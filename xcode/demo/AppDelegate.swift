@@ -18,6 +18,7 @@ import PlayerUISwiftUICheckPathPlugin
 import PlayerUIExternalActionPlugin
 import PlayerUIExternalActionViewModifierPlugin
 import PlayerUIMetricsPlugin
+import PlayerUIPrintLoggerPlugin
 import PlayerUIPubSubPlugin
 import PlayerUITransitionPlugin
 import PlayerUITypesProviderPlugin

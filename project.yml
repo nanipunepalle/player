@@ -62,6 +62,8 @@ targets:
       - package: PlayerUI
         product: PlayerUIPubSubPlugin
       - package: PlayerUI
+        product: PlayerUIPrintLoggerPlugin
+      - package: PlayerUI
         product: PlayerUISwiftUICheckPathPlugin
       - package: PlayerUI
         product: PlayerUISwiftUIPendingTransactionPlugin

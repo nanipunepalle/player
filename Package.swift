@@ -48,6 +48,10 @@ let package = Package(
             targets: ["PlayerUISwiftUICheckPathPlugin"]
         ),
         .library(
+            name: "PlayerUIPrintLoggerPlugin",
+            targets: ["PlayerUIPrintLoggerPlugin"]
+        ),
+        .library(
             name: "PlayerUISwiftUIPendingTransactionPlugin",
             targets: ["PlayerUISwiftUIPendingTransactionPlugin"]
         ),
@@ -80,12 +84,8 @@ let package = Package(
             exclude: [
                 "reference-assets",
                 "logger",
-                "plugins/BeaconPlugin",
-                "plugins/SwiftUICheckPathPlugin",
-                "plugins/ExternalActionViewModifierPlugin",
-                "plugins/SwiftUIPendingTransactionPlugin",
-                "plugins/TransitionPlugin"
-            ] + pluginList.map { "plugins/\($0)" },
+                "plugins"
+            ],
             resources: [
                 .process("core/Resources")
             ]
@@ -135,6 +135,14 @@ let package = Package(
                 .target(name: "PlayerUIExternalActionPlugin")
             ],
             path: "ios/Sources/plugins/ExternalActionViewModifierPlugin"
+        ),
+        // Swift only plugins
+        .target(
+            name: "PlayerUIPrintLoggerPlugin",
+            dependencies: [
+                .target(name: "PlayerUI")
+            ],
+            path: "ios/Sources/plugins/PrintLoggerPlugin"
         ),
         .target(
             name: "PlayerUISwiftUIPendingTransactionPlugin",

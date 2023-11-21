@@ -7,6 +7,7 @@
 
 import Foundation
 #if SWIFT_PACKAGE
+import PlayerUI
 import PlayerUILogger
 #endif
 
