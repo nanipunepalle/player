@@ -27,11 +27,11 @@ class ManagedPlayer14Tests: ViewInspectorTestCase {
 
         let playerView = try player.inspect()
 
-        try playerView.view(ManagedPlayer14<Text, EmptyView>.self).vStack().group(0).color(0).callOnAppear()
+        try playerView.find(ManagedPlayer14<Text, EmptyView>.self).vStack().group(0).color(0).callOnAppear()
 
         waitOnChange(viewModel.$loadingState.eraseToAnyPublisher()) { $0 == ManagedPlayerViewModel.LoadingState.loading }
 
-        let text = try playerView.view(ManagedPlayer14<Text, EmptyView>.self).vStack().group(0).text(0)
+        let text = try playerView.find(ManagedPlayer14<Text, EmptyView>.self).vStack().group(0).text(0)
 
         XCTAssertEqual("Loading", try text.string())
     }
@@ -42,14 +42,14 @@ class ManagedPlayer14Tests: ViewInspectorTestCase {
 
         let playerView = try player.inspect()
 
-        try playerView.view(ManagedPlayer14<Text, EmptyView>.self).vStack().group(0).color(0).callOnAppear()
+        try playerView.find(ManagedPlayer14<Text, EmptyView>.self).vStack().group(0).color(0).callOnAppear()
 
         waitOnChange(viewModel.$loadingState.eraseToAnyPublisher()) {
             guard case .failed = $0 else { return false }
             return true
         }
 
-        let text = try playerView.view(ManagedPlayer14<Text, EmptyView>.self).vStack().group(0).text(0).string()
+        let text = try playerView.find(ManagedPlayer14<Text, EmptyView>.self).vStack().group(0).text(0).string()
         XCTAssertEqual(text, "Error")
     }
 
@@ -65,13 +65,13 @@ class ManagedPlayer14Tests: ViewInspectorTestCase {
             }
         )
 
-        try player.inspect().view(ManagedPlayer14<Text, EmptyView>.self).vStack().group(0).color(0).callOnAppear()
+        try player.inspect().find(ManagedPlayer14<Text, EmptyView>.self).vStack().group(0).color(0).callOnAppear()
 
         ViewHosting.host(view: player)
 
         let exp2 = player.inspection.inspect(after: 3) { view in
             let view = try view
-                .view(ManagedPlayer14<Text, EmptyView>.self)
+                .find(ManagedPlayer14<Text, EmptyView>.self)
                 .vStack()
                 .group(0)
                 .view(SwiftUIPlayer.self, 0)
@@ -101,13 +101,13 @@ class ManagedPlayer14Tests: ViewInspectorTestCase {
             }
         )
 
-        try player.inspect().view(ManagedPlayer14<Text, EmptyView>.self).vStack().group(0).color(0).callOnAppear()
+        try player.inspect().find(ManagedPlayer14<Text, EmptyView>.self).vStack().group(0).color(0).callOnAppear()
 
         ViewHosting.host(view: player)
 
         let exp2 = player.inspection.inspect(after: 3) { view in
             let view = try view
-                .view(ManagedPlayer14<Text, EmptyView>.self)
+                .find(ManagedPlayer14<Text, EmptyView>.self)
                 .vStack()
                 .group(0)
                 .view(SwiftUIPlayer.self, 0)
@@ -137,13 +137,13 @@ class ManagedPlayer14Tests: ViewInspectorTestCase {
             }
         )
 
-        try player.inspect().view(ManagedPlayer14<Text, EmptyView>.self).vStack().group(0).color(0).callOnAppear()
+        try player.inspect().find(ManagedPlayer14<Text, EmptyView>.self).vStack().group(0).color(0).callOnAppear()
 
         ViewHosting.host(view: player)
 
         let exp2 = player.inspection.inspect(after: 3) { view in
             let view = try view
-                .view(ManagedPlayer14<Text, EmptyView>.self)
+                .find(ManagedPlayer14<Text, EmptyView>.self)
                 .vStack()
                 .group(0)
                 .view(SwiftUIPlayer.self, 0)

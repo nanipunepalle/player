@@ -4,7 +4,7 @@ packages:
     path: .
   ViewInspector:
     url: https://github.com/nalexn/ViewInspector
-    exactVersion: "0.9.0"
+    exactVersion: "0.9.8"
 configs:
   AdHoc: debug
   Debug: debug
