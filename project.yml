@@ -51,3 +51,13 @@ targets:
         product: PlayerUIExpressionPlugin
       - package: PlayerUI
         product: PlayerUIBeaconPlugin
+      - package: PlayerUI
+        product: PlayerUICommonExpressionsPlugin
+      - package: PlayerUI
+        product: PlayerUISwiftUICheckPathPlugin
+      - package: PlayerUI
+        product: PlayerUIExternalActionPlugin
+      - package: PlayerUI
+        product: PlayerUIMetricsPlugin
+      - package: PlayerUI
+        product: PlayerUIPubSubPlugin

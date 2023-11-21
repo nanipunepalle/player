@@ -3,7 +3,19 @@
 
 import PackageDescription
 
-let pluginList: [String] = ["BaseBeaconPlugin", "CommonTypesPlugin", "ExpressionPlugin"]
+// Simple plugins that just rely on core + their own JS bundle
+let pluginList: [String] = [
+    "BaseBeaconPlugin",
+    "CheckPathPlugin",
+    "CommonExpressionsPlugin",
+    "CommonTypesPlugin", 
+    "ComputedPropertiesPlugin",
+    "ExpressionPlugin",
+    "ExternalActionPlugin",
+    "MetricsPlugin",
+    "PubSubPlugin"
+]
+
 let plugins: [(Target, Product)] = pluginList.map { (Target.playerPlugin(name: $0), Product.playerPlugin(name: $0)) }
 
 let package = Package(
@@ -24,6 +36,10 @@ let package = Package(
         .library(
             name: "PlayerUIBeaconPlugin",
             targets: ["PlayerUIBeaconPlugin"]
+        ),
+        .library(
+            name: "PlayerUISwiftUICheckPathPlugin",
+            targets: ["PlayerUISwiftUICheckPathPlugin"]
         )
     ] + plugins.map(\.1),
     dependencies: [
@@ -50,7 +66,9 @@ let package = Package(
             exclude: [
                 "reference-assets",
                 "logger",
-                "plugins/BeaconPlugin"
+                "plugins/BeaconPlugin",
+                "plugins/SwiftUICheckPathPlugin",
+                "plugins/ExternalActionViewModifierPlugin"
             ] + pluginList.map { "plugins/\($0)" },
             resources: [
                 .process("core/Resources")
@@ -76,6 +94,7 @@ let package = Package(
             ]
         ),
 
+        // Plugins with dependencies
         .target(
             name: "PlayerUIBeaconPlugin",
             dependencies: [
@@ -83,6 +102,14 @@ let package = Package(
                 .target(name: "PlayerUIBaseBeaconPlugin")
             ],
             path: "ios/Sources/plugins/BeaconPlugin"
+        ),
+        .target(
+            name: "PlayerUISwiftUICheckPathPlugin",
+            dependencies: [
+                .target(name: "PlayerUI"),
+                .target(name: "PlayerUICheckPathPlugin")
+            ],
+            path: "ios/Sources/plugins/SwiftUICheckPathPlugin"
         )
     ] + plugins.map(\.0)
 )

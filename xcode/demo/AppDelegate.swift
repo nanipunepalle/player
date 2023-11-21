@@ -13,6 +13,11 @@ import PlayerUICommonTypesPlugin
 import PlayerUIExpressionPlugin
 import PlayerUIBeaconPlugin
 import PlayerUIBaseBeaconPlugin
+import PlayerUICommonExpressionsPlugin
+import PlayerUISwiftUICheckPathPlugin
+import PlayerUIExternalActionPlugin
+import PlayerUIMetricsPlugin
+import PlayerUIPubSubPlugin
 import SwiftUI
 import Combine
 
@@ -54,17 +59,18 @@ class SceneDelegate: UIResponder, UISceneDelegate {
         ReferenceAssetsPlugin(),
         CommonTypesPlugin(),
         ExpressionPlugin(),
-//        CommonExpressionsPlugin(),
-//        ExternalActionPlugin(handler: { _, _, _ in
-//            print("external state")
-//        }),
-//        MetricsPlugin { timing, render, flow in
-//            print(timing as Any)
-//            print(render as Any)
-//            print(flow as Any)
-//        },
-//        RequestTimePlugin { 5 },
-//        PubSubPlugin([]),
+        CommonExpressionsPlugin(),
+        SwiftUICheckPathPlugin(),
+        ExternalActionPlugin(handler: { _, _, _ in
+            print("external state")
+        }),
+        MetricsPlugin { timing, render, flow in
+            print(timing as Any)
+            print(render as Any)
+            print(flow as Any)
+        },
+        RequestTimePlugin { 5 },
+        PubSubPlugin([]),
 //        TypesProviderPlugin(types: [], validators: [], formats: []),
 //        TransitionPlugin(popTransition: .pop),
         BeaconPlugin<DefaultBeacon> { print(String(describing: $0)) },

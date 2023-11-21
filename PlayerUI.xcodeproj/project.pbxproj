@@ -10,12 +10,17 @@
 		182A6F7BF87420503C553227 /* action-transition-between-pages.json in Resources */ = {isa = PBXBuildFile; fileRef = 2F6E9E582146884B86EF2249 /* action-transition-between-pages.json */; };
 		1A28F7C18A36D6061DA53B56 /* input-validation.json in Resources */ = {isa = PBXBuildFile; fileRef = 625ACEAFB6CC644C2455D8B1 /* input-validation.json */; };
 		2013495CE38D78799945017B /* info-modal-flow.json in Resources */ = {isa = PBXBuildFile; fileRef = FC323B965AB862BE5446FACD /* info-modal-flow.json */; };
+		21400C7F6C94DC03087B66A1 /* PlayerUIExternalActionPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 8A1FA4604C573ABD74E5E906 /* PlayerUIExternalActionPlugin */; };
 		25781C4A6D4F1B399D8ADAB2 /* info-dynamic-flow.json in Resources */ = {isa = PBXBuildFile; fileRef = C2D900481819D2082F744905 /* info-dynamic-flow.json */; };
 		33EEC1429AAD1FACECA829D7 /* Primary.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F515AD34A8D3C0AFFAC23F84 /* Primary.storyboard */; };
+		3A05B81E7B1DB5BB6660CE73 /* PlayerUIPubSubPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 51BD94ABCC784BEE5037990D /* PlayerUIPubSubPlugin */; };
+		3ECBC01EEBC76B453D54B5DD /* PlayerUIMetricsPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = D6A18006BACA8E5F6F7EE9E5 /* PlayerUIMetricsPlugin */; };
 		4089A94A94F6F705853859EA /* PlayerUIReferenceAssets in Frameworks */ = {isa = PBXBuildFile; productRef = 458AE28BCEFEF5752FF7D0C5 /* PlayerUIReferenceAssets */; };
 		410C438BDEACCDA35D08DDA7 /* PlayerUI in Frameworks */ = {isa = PBXBuildFile; productRef = 743B896AD0521455292BA3E2 /* PlayerUI */; };
 		6051B047A2062EC160BF1430 /* action-basic.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A2C098E286BB24E4B19C94A /* action-basic.json */; };
 		8002A0CC1A3BF783D306214E /* text-basic.json in Resources */ = {isa = PBXBuildFile; fileRef = F9307C2F5FBD1A4C7678048D /* text-basic.json */; };
+		843FDD43942A325E129445C9 /* PlayerUISwiftUICheckPathPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 0FBDEF4335907B230E066269 /* PlayerUISwiftUICheckPathPlugin */; };
+		8655679863F90E955AF11A00 /* PlayerUICommonExpressionsPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 501A5D87612D3A0DC9B34286 /* PlayerUICommonExpressionsPlugin */; };
 		8A06F265E5DFC378AD67FB07 /* MockFlows.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25A080A551B654B2A65E1E23 /* MockFlows.swift */; };
 		8B55574C08F6FA68CF4CB16C /* action-transition-to-end.json in Resources */ = {isa = PBXBuildFile; fileRef = 2929B2C93E184B754C085FAA /* action-transition-to-end.json */; };
 		97EEC0DF7EF444D8ECB004F9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2994D61AF3412FC9A328129D /* AppDelegate.swift */; };
@@ -60,6 +65,11 @@
 				E1D90BA30CF9FD4818309F8B /* PlayerUICommonTypesPlugin in Frameworks */,
 				F8A91B63E57CBCDD6B851546 /* PlayerUIExpressionPlugin in Frameworks */,
 				E7BEA817D8868F3B73E6D951 /* PlayerUIBeaconPlugin in Frameworks */,
+				8655679863F90E955AF11A00 /* PlayerUICommonExpressionsPlugin in Frameworks */,
+				843FDD43942A325E129445C9 /* PlayerUISwiftUICheckPathPlugin in Frameworks */,
+				21400C7F6C94DC03087B66A1 /* PlayerUIExternalActionPlugin in Frameworks */,
+				3ECBC01EEBC76B453D54B5DD /* PlayerUIMetricsPlugin in Frameworks */,
+				3A05B81E7B1DB5BB6660CE73 /* PlayerUIPubSubPlugin in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -193,6 +203,11 @@
 				6D2BCE2413F0E32E9D805806 /* PlayerUICommonTypesPlugin */,
 				CEB109549BD2C066A57F52FA /* PlayerUIExpressionPlugin */,
 				D4BDD6A24D7103F8C8200460 /* PlayerUIBeaconPlugin */,
+				501A5D87612D3A0DC9B34286 /* PlayerUICommonExpressionsPlugin */,
+				0FBDEF4335907B230E066269 /* PlayerUISwiftUICheckPathPlugin */,
+				8A1FA4604C573ABD74E5E906 /* PlayerUIExternalActionPlugin */,
+				D6A18006BACA8E5F6F7EE9E5 /* PlayerUIMetricsPlugin */,
+				51BD94ABCC784BEE5037990D /* PlayerUIPubSubPlugin */,
 			);
 			productName = PlayerUIDemo;
 			productReference = BD4629B66AB33441F016A5DE /* PlayerUIDemo.app */;
@@ -529,9 +544,21 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0FBDEF4335907B230E066269 /* PlayerUISwiftUICheckPathPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PlayerUISwiftUICheckPathPlugin;
+		};
 		458AE28BCEFEF5752FF7D0C5 /* PlayerUIReferenceAssets */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PlayerUIReferenceAssets;
+		};
+		501A5D87612D3A0DC9B34286 /* PlayerUICommonExpressionsPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PlayerUICommonExpressionsPlugin;
+		};
+		51BD94ABCC784BEE5037990D /* PlayerUIPubSubPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PlayerUIPubSubPlugin;
 		};
 		6D2BCE2413F0E32E9D805806 /* PlayerUICommonTypesPlugin */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -541,6 +568,10 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = PlayerUI;
 		};
+		8A1FA4604C573ABD74E5E906 /* PlayerUIExternalActionPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PlayerUIExternalActionPlugin;
+		};
 		CEB109549BD2C066A57F52FA /* PlayerUIExpressionPlugin */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PlayerUIExpressionPlugin;
@@ -548,6 +579,10 @@
 		D4BDD6A24D7103F8C8200460 /* PlayerUIBeaconPlugin */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PlayerUIBeaconPlugin;
+		};
+		D6A18006BACA8E5F6F7EE9E5 /* PlayerUIMetricsPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PlayerUIMetricsPlugin;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
