@@ -100,8 +100,28 @@ targets:
       - package: PlayerUI
         product: PlayerUILogger
       - package: PlayerUI
+        product: PlayerUIBaseBeaconPlugin
+      - package: PlayerUI
+        product: PlayerUICheckPathPlugin
+      - package: PlayerUI
+        product: PlayerUIComputedPropertiesPlugin
+      - package: PlayerUI
+        product: PlayerUICommonExpressionsPlugin
+      - package: PlayerUI
+        product: PlayerUICommonTypesPlugin
+      - package: PlayerUI
+        product: PlayerUIExternalActionPlugin
+      - package: PlayerUI
+        product: PlayerUIExpressionPlugin
+      - package: PlayerUI
         product: PlayerUIMetricsPlugin
       - package: PlayerUI
+        product: PlayerUIPubSubPlugin
+      - package: PlayerUI
         product: PlayerUIPrintLoggerPlugin
+      - package: PlayerUI
+        product: PlayerUIStageRevertDataPlugin
+      - package: PlayerUI
+        product: PlayerUITypesProviderPlugin
       - package: PlayerUI
         product: PlayerUIReferenceAssets
