@@ -3,6 +3,7 @@ import Combine
 #if SWIFT_PACKAGE
 import PlayerUI
 import PlayerUIBeaconPlugin
+import PlayerUISwiftUIPendingTransactionPlugin
 #endif
 
 /**

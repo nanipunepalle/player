@@ -61,3 +61,9 @@ targets:
         product: PlayerUIMetricsPlugin
       - package: PlayerUI
         product: PlayerUIPubSubPlugin
+      - package: PlayerUI
+        product: PlayerUISwiftUIPendingTransactionPlugin
+      - package: PlayerUI
+        product: PlayerUITransitionPlugin
+      - package: PlayerUI
+        product: PlayerUITypesProviderPlugin

@@ -13,7 +13,9 @@ let pluginList: [String] = [
     "ExpressionPlugin",
     "ExternalActionPlugin",
     "MetricsPlugin",
-    "PubSubPlugin"
+    "PubSubPlugin",
+    "StageRevertDataPlugin",
+    "TypesProviderPlugin"
 ]
 
 let plugins: [(Target, Product)] = pluginList.map { (Target.playerPlugin(name: $0), Product.playerPlugin(name: $0)) }
@@ -40,6 +42,14 @@ let package = Package(
         .library(
             name: "PlayerUISwiftUICheckPathPlugin",
             targets: ["PlayerUISwiftUICheckPathPlugin"]
+        ),
+        .library(
+            name: "PlayerUISwiftUIPendingTransactionPlugin",
+            targets: ["PlayerUISwiftUIPendingTransactionPlugin"]
+        ),
+        .library(
+            name: "PlayerUITransitionPlugin",
+            targets: ["PlayerUITransitionPlugin"]
         )
     ] + plugins.map(\.1),
     dependencies: [
@@ -68,7 +78,9 @@ let package = Package(
                 "logger",
                 "plugins/BeaconPlugin",
                 "plugins/SwiftUICheckPathPlugin",
-                "plugins/ExternalActionViewModifierPlugin"
+                "plugins/ExternalActionViewModifierPlugin",
+                "plugins/SwiftUIPendingTransactionPlugin",
+                "plugins/TransitionPlugin"
             ] + pluginList.map { "plugins/\($0)" },
             resources: [
                 .process("core/Resources")
@@ -86,7 +98,8 @@ let package = Package(
             dependencies: [
                 .product(name: "SwiftHooks", package: "swift-hooks"),
                 .target(name: "PlayerUI"),
-                .target(name: "PlayerUIBeaconPlugin")
+                .target(name: "PlayerUIBeaconPlugin"),
+                .target(name: "PlayerUISwiftUIPendingTransactionPlugin")
             ],
             path: "ios/Sources/reference-assets",
             resources: [
@@ -110,6 +123,20 @@ let package = Package(
                 .target(name: "PlayerUICheckPathPlugin")
             ],
             path: "ios/Sources/plugins/SwiftUICheckPathPlugin"
+        ),
+        .target(
+            name: "PlayerUISwiftUIPendingTransactionPlugin",
+            dependencies: [
+                .target(name: "PlayerUI")
+            ],
+            path: "ios/Sources/plugins/SwiftUIPendingTransactionPlugin"
+        ),
+        .target(
+            name: "PlayerUITransitionPlugin",
+            dependencies: [
+                .target(name: "PlayerUI")
+            ],
+            path: "ios/Sources/plugins/TransitionPlugin"
         )
     ] + plugins.map(\.0)
 )

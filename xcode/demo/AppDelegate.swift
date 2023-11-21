@@ -18,6 +18,9 @@ import PlayerUISwiftUICheckPathPlugin
 import PlayerUIExternalActionPlugin
 import PlayerUIMetricsPlugin
 import PlayerUIPubSubPlugin
+import PlayerUITransitionPlugin
+import PlayerUITypesProviderPlugin
+import PlayerUISwiftUIPendingTransactionPlugin
 import SwiftUI
 import Combine
 
@@ -71,10 +74,10 @@ class SceneDelegate: UIResponder, UISceneDelegate {
         },
         RequestTimePlugin { 5 },
         PubSubPlugin([]),
-//        TypesProviderPlugin(types: [], validators: [], formats: []),
-//        TransitionPlugin(popTransition: .pop),
+        TypesProviderPlugin(types: [], validators: [], formats: []),
+        TransitionPlugin(popTransition: .pop),
         BeaconPlugin<DefaultBeacon> { print(String(describing: $0)) },
-//        SwiftUIPendingTransactionPlugin<PendingTransactionPhases>()
+        SwiftUIPendingTransactionPlugin<PendingTransactionPhases>()
     ]
 
     var window: UIWindow?

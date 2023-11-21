@@ -2,6 +2,7 @@ import SwiftUI
 import Combine
 #if SWIFT_PACKAGE
 import PlayerUI
+import PlayerUISwiftUIPendingTransactionPlugin
 #endif
 
 /**

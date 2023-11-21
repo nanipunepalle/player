@@ -9,11 +9,12 @@ import Foundation
 import Combine
 import SwiftHooks
 
+/// ** EXPERIMENTAL **
 /// A plugin used by the ManagedPlayer.
 ///
 /// When a ManagedPlayer is instantiated it will call `apply(_:)` on all managed player plugins it is
 /// provided.
-protocol ManagedPlayerPlugin {
+public protocol ManagedPlayerPlugin {
     /// Called by the ManagedPlayer upon instantiation.
     func apply(_ model: ManagedPlayerViewModel)
 }

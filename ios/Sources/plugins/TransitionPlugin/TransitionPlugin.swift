@@ -1,6 +1,9 @@
 import Combine
 import SwiftUI
 import SwiftHooks
+#if SWIFT_PACKAGE
+import PlayerUI
+#endif
 
 /**
  A plugin to supply transition animations for initial flow load and between views in a flow
@@ -44,7 +47,7 @@ public class TransitionPlugin: NativePlugin, ManagedPlayerPlugin {
         )
     }
 
-    func apply(_ model: ManagedPlayerViewModel) {
+    public func apply(_ model: ManagedPlayerViewModel) {
         let stateTransition = self.stateTransition
         model.stateTransition.tap(name: pluginName, id: tapId) { .bail(stateTransition) }
     }

@@ -12,12 +12,15 @@
 		2013495CE38D78799945017B /* info-modal-flow.json in Resources */ = {isa = PBXBuildFile; fileRef = FC323B965AB862BE5446FACD /* info-modal-flow.json */; };
 		21400C7F6C94DC03087B66A1 /* PlayerUIExternalActionPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 8A1FA4604C573ABD74E5E906 /* PlayerUIExternalActionPlugin */; };
 		25781C4A6D4F1B399D8ADAB2 /* info-dynamic-flow.json in Resources */ = {isa = PBXBuildFile; fileRef = C2D900481819D2082F744905 /* info-dynamic-flow.json */; };
+		261D2532FA20D8769EC690C2 /* PlayerUITransitionPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 87C1E15D986FBF7B473C1847 /* PlayerUITransitionPlugin */; };
 		33EEC1429AAD1FACECA829D7 /* Primary.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F515AD34A8D3C0AFFAC23F84 /* Primary.storyboard */; };
 		3A05B81E7B1DB5BB6660CE73 /* PlayerUIPubSubPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 51BD94ABCC784BEE5037990D /* PlayerUIPubSubPlugin */; };
 		3ECBC01EEBC76B453D54B5DD /* PlayerUIMetricsPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = D6A18006BACA8E5F6F7EE9E5 /* PlayerUIMetricsPlugin */; };
 		4089A94A94F6F705853859EA /* PlayerUIReferenceAssets in Frameworks */ = {isa = PBXBuildFile; productRef = 458AE28BCEFEF5752FF7D0C5 /* PlayerUIReferenceAssets */; };
 		410C438BDEACCDA35D08DDA7 /* PlayerUI in Frameworks */ = {isa = PBXBuildFile; productRef = 743B896AD0521455292BA3E2 /* PlayerUI */; };
 		6051B047A2062EC160BF1430 /* action-basic.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A2C098E286BB24E4B19C94A /* action-basic.json */; };
+		6A321A33D1F246AAC3D9C150 /* PlayerUITypesProviderPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = AF40349DF9651ACB78F6D740 /* PlayerUITypesProviderPlugin */; };
+		7654DD07FBE95BFDB97C5912 /* PlayerUISwiftUIPendingTransactionPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = F58C022BE5599591CB8F39C1 /* PlayerUISwiftUIPendingTransactionPlugin */; };
 		8002A0CC1A3BF783D306214E /* text-basic.json in Resources */ = {isa = PBXBuildFile; fileRef = F9307C2F5FBD1A4C7678048D /* text-basic.json */; };
 		843FDD43942A325E129445C9 /* PlayerUISwiftUICheckPathPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 0FBDEF4335907B230E066269 /* PlayerUISwiftUICheckPathPlugin */; };
 		8655679863F90E955AF11A00 /* PlayerUICommonExpressionsPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 501A5D87612D3A0DC9B34286 /* PlayerUICommonExpressionsPlugin */; };
@@ -70,6 +73,9 @@
 				21400C7F6C94DC03087B66A1 /* PlayerUIExternalActionPlugin in Frameworks */,
 				3ECBC01EEBC76B453D54B5DD /* PlayerUIMetricsPlugin in Frameworks */,
 				3A05B81E7B1DB5BB6660CE73 /* PlayerUIPubSubPlugin in Frameworks */,
+				7654DD07FBE95BFDB97C5912 /* PlayerUISwiftUIPendingTransactionPlugin in Frameworks */,
+				261D2532FA20D8769EC690C2 /* PlayerUITransitionPlugin in Frameworks */,
+				6A321A33D1F246AAC3D9C150 /* PlayerUITypesProviderPlugin in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -208,6 +214,9 @@
 				8A1FA4604C573ABD74E5E906 /* PlayerUIExternalActionPlugin */,
 				D6A18006BACA8E5F6F7EE9E5 /* PlayerUIMetricsPlugin */,
 				51BD94ABCC784BEE5037990D /* PlayerUIPubSubPlugin */,
+				F58C022BE5599591CB8F39C1 /* PlayerUISwiftUIPendingTransactionPlugin */,
+				87C1E15D986FBF7B473C1847 /* PlayerUITransitionPlugin */,
+				AF40349DF9651ACB78F6D740 /* PlayerUITypesProviderPlugin */,
 			);
 			productName = PlayerUIDemo;
 			productReference = BD4629B66AB33441F016A5DE /* PlayerUIDemo.app */;
@@ -568,9 +577,17 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = PlayerUI;
 		};
+		87C1E15D986FBF7B473C1847 /* PlayerUITransitionPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PlayerUITransitionPlugin;
+		};
 		8A1FA4604C573ABD74E5E906 /* PlayerUIExternalActionPlugin */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PlayerUIExternalActionPlugin;
+		};
+		AF40349DF9651ACB78F6D740 /* PlayerUITypesProviderPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PlayerUITypesProviderPlugin;
 		};
 		CEB109549BD2C066A57F52FA /* PlayerUIExpressionPlugin */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -583,6 +600,10 @@
 		D6A18006BACA8E5F6F7EE9E5 /* PlayerUIMetricsPlugin */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PlayerUIMetricsPlugin;
+		};
+		F58C022BE5599591CB8F39C1 /* PlayerUISwiftUIPendingTransactionPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PlayerUISwiftUIPendingTransactionPlugin;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

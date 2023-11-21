@@ -69,7 +69,7 @@ open class BaseAssetRegistry<WrapperType>: PlayerRegistry where
         }
     }
 
-    let decoder = JSONDecoder()
+    public let decoder = JSONDecoder()
 
     /**
      Initializes an empty registry
