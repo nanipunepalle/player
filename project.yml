@@ -2,6 +2,9 @@ name: PlayerUI
 packages:
   PlayerUI:
     path: .
+  ViewInspector:
+    url: https://github.com/nalexn/ViewInspector
+    exactVersion: "0.9.0"
 configs:
   AdHoc: debug
   Debug: debug
@@ -81,7 +84,7 @@ targets:
       - path: ./ios/Tests
       - path: ./ios/TestUtilities
     info:
-      path: Tests/Info.plist
+      path: ./ios/Tests/Info.plist
     settings:
       TEST_HOST: $(BUILT_PRODUCTS_DIR)/PlayerUIDemo.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PlayerUIDemo
       TEST_TARGET_NAME: PlayerUIDemo
@@ -125,3 +128,47 @@ targets:
         product: PlayerUITypesProviderPlugin
       - package: PlayerUI
         product: PlayerUIReferenceAssets
+      - package: PlayerUI
+        product: PlayerUITestUtilitiesCore
+
+  ViewInspectorTests:
+    type: bundle.ui-testing
+    platform: iOS
+    deploymentTarget: "14.0"
+    sources:
+      - path: ./ios/ViewInspector
+      - path: ./ios/TestUtilities
+    info:
+      path: ./ios/ViewInspector/Info.plist
+    settings:
+      # defaults from settingPreset https://github.com/yonaskolb/XcodeGen/blob/3757f82bf6ed3916235828a3e3d64fa0c787d564/SettingPresets/Products/bundle.ui-testing.yml
+      BUNDLE_LOADER: $(TEST_HOST)
+      LD_RUNPATH_SEARCH_PATHS: ["$(inherited)", "@loader_path/Frameworks"]
+      CODE_SIGN_STYLE: Manual
+      DEVELOPMENT_TEAM: F6DWWXWEX6
+      PRODUCT_BUNDLE_IDENTIFIER: com.intuit.ios.PlayerUI-ExampleUITests
+      PROVISIONING_PROFILE_SPECIFIER: "match Development com.intuit.ios.PlayerUI-ExampleUITests*"
+      CODE_SIGN_IDENTITY: "iPhone Distribution"
+    dependencies:
+      - package: ViewInspector
+      - target: PlayerUIDemo
+      - package: PlayerUI
+        product: PlayerUI
+      - package: PlayerUI
+        product: PlayerUIBaseBeaconPlugin
+      - package: PlayerUI
+        product: PlayerUIBeaconPlugin
+      - package: PlayerUI
+        product: PlayerUISwiftUICheckPathPlugin
+      - package: PlayerUI
+        product: PlayerUISwiftUIPendingTransactionPlugin
+      - package: PlayerUI
+        product: PlayerUIMetricsPlugin
+      - package: PlayerUI
+        product: PlayerUIExternalActionViewModifierPlugin
+      - package: PlayerUI
+        product: PlayerUITransitionPlugin
+      - package: PlayerUI
+        product: PlayerUIReferenceAssets
+      - package: PlayerUI
+        product: PlayerUITestUtilitiesCore

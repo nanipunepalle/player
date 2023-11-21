@@ -76,6 +76,8 @@ xcui.json
 # Swift Package Manager
 .build
 .swiftpm
+PlayerUI.xcodeproj/
+!PlayerUI.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
 
 # Bundles used by cocoapods for development
 ios/*/*/Resources/**/*.js
