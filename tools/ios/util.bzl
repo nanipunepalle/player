@@ -48,6 +48,7 @@ def swiftui_plugin(name, resources = [], deps = [], test_deps = []):
       hasUnitTests = False, 
       hasViewInspectorTests = True,
       test_host = test_host,
+      hasUITests = True,
       needsXCTest = False,
       bundle_name = name
   )
