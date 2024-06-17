@@ -10,6 +10,6 @@ swiftui_plugin(
         "//plugins/pending-transaction/swiftui:PlayerUISwiftUIPendingTransactionPlugin"
     ],
     test_deps = [
-        "//ios/test-utils:PlayerUITestUtilities",
+        "//ios/test-utils:PlayerUITestUtilities"
     ]
 )
